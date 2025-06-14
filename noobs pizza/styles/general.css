@@ -1,0 +1,68 @@
+/* General body and layout styles */
+body {
+    font-family: sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.nyanwolf-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Place behind content */
+    opacity: 0.2; /* Make it subtle */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: none; /* Don't interfere with scrolling */
+}
+
+.nyanwolf-bg img {
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: cover; /* Cover the area */
+}
+
+.container {
+    text-align: center;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative; /* Needed for z-index */
+    z-index: 1; /* Ensure content is above background */
+    transition: border-color 0.5s ease, box-shadow 0.5s ease; /* Smooth transition */
+}
+
+/* Styles for game over state */
+.container.game-over {
+    border-color: #8B0000;
+    box-shadow: 0 0 20px rgba(139, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.9);
+    transition: all 1s ease;
+}
+
+.container h1,
+.container p {
+    color: #333; /* Default text color */
+}
+
+.game-over.container h1,
+.game-over.container p {
+    color: #eee; /* Lighter text color in game over */
+}
+
+/* Jumpscare specific overlay style */
+.punch-overlay.jumpscare-active {
+    background-color: rgba(255, 0, 0, 0.8); /* Bright red */
+    opacity: 1; /* Full opacity */
+    transition: opacity 0.1s ease-out; /* Quick fade */
+}

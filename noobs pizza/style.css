@@ -1,0 +1,9 @@
+body {
+    overflow: auto;
+    padding: 20px;
+}
+
+.container {
+    margin: 20px auto;
+    max-width: 1200px;
+}

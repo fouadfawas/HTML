@@ -1,0 +1,101 @@
+/* Button container and section styles */
+.button-container {
+    margin-top: 20px;
+    display: flex; /* Use flexbox to arrange buttons */
+    justify-content: center; /* Center buttons horizontally */
+    gap: 10px; /* Add space between buttons */
+    flex-wrap: wrap; /* Allow buttons to wrap */
+    max-height: none; /* Remove height restrictions */
+}
+
+/* Base button styles */
+.button-container button,
+.custom-button-container button,
+.upload-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+    text-decoration: none; /* For upload button acting as link */
+    display: inline-block; /* For upload button */
+    text-align: center; /* For upload button */
+}
+
+/* Specific button colors */
+#blue-cheese-button { background-color: #4682B4; } /* Steel blue */
+#blue-cheese-button:hover { background-color: #3a6d97; }
+
+#pepperoni-button { background-color: #e74c3c; } /* Reddish */
+#pepperoni-button:hover { background-color: #c0392b; }
+
+#pineapple-button { background-color: #f39c12; } /* Orange-yellowish */
+#pineapple-button:hover { background-color: #e67e22; }
+
+#broccoli-button { background-color: #2E8B57; } /* Sea green */
+#broccoli-button:hover { background-color: #256e45; }
+
+#sushi-button { background-color: #800080; } /* Purple */
+#sushi-button:hover { background-color: #660066; } /* Darker purple */
+
+#cookie-button { background-color: #D2691E; } /* Chocolate */
+#cookie-button:hover { background-color: #a0522d; } /* Darker chocolate */
+
+#fries-button { background-color: #FFD700; color: #333; } /* Gold */
+#fries-button:hover { background-color: #DAA520; } /* Goldenrod */
+
+#ice-cream-button { background-color: #FF69B4; } /* Hot Pink */
+#ice-cream-button:hover { background-color: #C71585; } /* Medium Violet Red */
+
+#worm-button { background-color: #556B2F; } /* Dark Olive Green */
+#worm-button:hover { background-color: #6B8E23; } /* Olive Drab */
+
+#mealworms-button { background-color: #8FBC8F; } /* Dark Sea Green */
+#mealworms-button:hover { background-color: #7aab7a; } /* Darker Sea Green */
+
+#strange-elixir-button { background-color: #654321; } /* Dark Brown */
+#strange-elixir-button:hover { background-color: #5a3b1d; } /* Darker Brown */
+
+#blood-button { background-color: #B22222; } /* Firebrick */
+#blood-button:hover { background-color: #8B0000; } /* Dark Red */
+
+#mystery-ooze-button { background-color: #228B22; } /* Forest Green */
+#mystery-ooze-button:hover { background-color: #006400; } /* Dark Green */
+
+#spill-soda-button { background-color: #00CED1; } /* Dark Turquoise */
+#spill-soda-button:hover { background-color: #008B8B; } /* Dark Cyan */
+
+#expired-food-button { background-color: #A0522D; } /* Sienna */
+#expired-food-button:hover { background-color: #8B4513; } /* SaddleBrown */
+
+#boop-nose-button { background-color: #DC143C; } /* Crimson */
+#boop-nose-button:hover { background-color: #B22222; } /* Firebrick */
+
+#salad-button { background-color: #90EE90; color: #333; } /* Light Green */
+#salad-button:hover { background-color: #7CFC00; } /* Lawn Green */
+
+#water-button { background-color: #ADD8E6; color: #333; } /* Light Blue */
+#water-button:hover { background-color: #B0C4DE; } /* Light Steel Blue */
+
+#empty-box-button { background-color: #CD853F; } /* Peru */
+#empty-box-button:hover { background-color: #D2691E; } /* Chocolate */
+
+#mud-button { background-color: #8B4513; } /* SaddleBrown */
+#mud-button:hover { background-color: #A0522D; } /* Sienna */
+
+#rock-button { background-color: #696969; } /* Dim Gray */
+#rock-button:hover { background-color: #808080; } /* Gray */
+
+#cheese-button { background-color: #FFD700; color: #333; } /* Gold */
+#cheese-button:hover { background-color: #B8860B; } /* Dark Goldenrod */
+
+#pretzel-button { background-color: #CD853F; } /* Peru */
+#pretzel-button:hover { background-color: #D2691E; } /* Chocolate */
+
+#sandwich-button { background-color: #F4A460; } /* Sandy Brown */
+#sandwich-button:hover { background-color: #DAA520; } /* Goldenrod */
+
+#carrot-button { background-color: #ED9121; } /* Carrot Orange */
+#carrot-button:hover { background-color: #CD5C5C; } /* Indian Red */

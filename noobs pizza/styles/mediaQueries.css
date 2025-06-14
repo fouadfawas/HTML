@@ -1,0 +1,26 @@
+/* Responsive styles */
+@media (max-width: 768px) {
+    .container {
+        margin: 10px;
+        padding: 10px;
+    }
+
+    body {
+        padding: 10px;
+    }
+
+    .button-section {
+        flex-basis: calc(50% - 10px); /* 2 sections per row on smaller screens */
+    }
+
+     .very-evil-section,
+     .revival-section {
+         flex-basis: 100%; /* Full width for these sections on small screens */
+     }
+}
+
+@media (max-width: 480px) {
+    .button-section {
+        flex-basis: 100%; /* 1 section per row on very small screens */
+    }
+}

@@ -1,0 +1,225 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Don't Touch the Pizza!</title>
+    <!-- Linking multiple CSS files -->
+    <link rel="stylesheet" href="styles/general.css">
+    <link rel="stylesheet" href="styles/pizza.css">
+    <link rel="stylesheet" href="styles/buttons.css">
+    <link rel="stylesheet" href="styles/relationshipMeter.css">
+    <link rel="stylesheet" href="styles/customButtons.css">
+    <link rel="stylesheet" href="styles/autoclicker.css">
+    <link rel="stylesheet" href="styles/aiInteraction.css">
+    <link rel="stylesheet" href="styles/mediaQueries.css">
+
+    <!-- Using import maps for potential future modularity -->
+    <script type="importmap">
+        {
+            "imports": {
+                "./modules/audio.js": "./modules/audio.js",
+                "./modules/reactions.js": "./modules/reactions.js",
+                "./modules/buttonEvents.js": "./modules/buttonEvents.js",
+                "./modules/kindButtonEvents.js": "./modules/kindButtonEvents.js",
+                "./modules/neutralButtonEvents.js": "./modules/neutralButtonEvents.js",
+                "./modules/evilButtonEvents.js": "./modules/evilButtonEvents.js",
+                "./modules/veryEvilButtonEvents.js": "./modules/veryEvilButtonEvents.js",
+                "./modules/imageUpload.js": "./modules/imageUpload.js",
+                "./modules/customButtons.js": "./modules/customButtons.js",
+                "./modules/autoclicker.js": "./modules/autoclicker.js",
+                "./modules/pizzaInteraction.js": "./modules/pizzaInteraction.js",
+                "./modules/relationshipMeter.js": "./modules/relationshipMeter.js",
+                "./modules/revivalSystem.js": "./modules/revivalSystem.js",
+                "./modules/aiInteraction.js": "./modules/aiInteraction.js"
+            }
+        }
+    </script>
+    <script>
+        // Add basic utility functions that need to be available early
+        function findButtonByText(text) {
+            return Array.from(document.querySelectorAll('button')).find(
+                button => button.textContent.toLowerCase().includes(text.toLowerCase())
+            );
+        }
+    </script>
+</head>
+<body>
+    <div class="punch-overlay"></div>
+    <div class="nyanwolf-bg">
+        <img src="nyanwolf-nyan-animation (2).gif" alt="Nyanwolf Animation">
+    </div>
+
+    <div class="container">
+        <h1>Roblox Noob and His Pizza</h1>
+        <p>Be warned! Don't touch his pizza... seriously.</p>
+
+        <div class="relationship-meter">
+            <div class="meter-label">Relationship Level: <span id="relationship-status">Neutral</span></div>
+            <div class="meter-container">
+                <div id="relationship-bar" class="meter-bar"></div>
+            </div>
+        </div>
+
+        <div class="pizza-area">
+            <img id="creature-pizza" src="roblox_noob_pizza.png" alt="Roblox Noob holding pizza pizza">
+            <div id="reaction-text" class="reaction-text">Hey! Don't touch my pizza!</div>
+        </div>
+
+        <div class="button-container">
+            <!-- Kind Actions Section -->
+            <div class="button-section kind-section">
+                <h3>Kind Actions</h3>
+                <button id="pet-button">Pet Him</button>
+                <button id="hug-button">Hug Him</button>
+                <button id="kiss-button">Kiss Him (careful!)</button>
+                <button id="blue-cheese-button">Give him Blue Cheese</button>
+                <button id="pepperoni-button">Offer Pepperoni</button>
+                <button id="cookie-button">Offer Cookie</button>
+                <button id="fries-button">Offer Fries</button>
+                <button id="ice-cream-button">Offer Ice Cream</button>
+                <button id="cheese-button">Offer Cheese</button>
+                <button id="pretzel-button">Offer Pretzel</button>
+                <button id="candy-button">Offer Candy</button>
+                <button id="sfw-fanart-button">Show him SFW Fanart</button>
+                <label for="image-upload-input" id="upload-image-button" class="upload-button">Give him Uploaded Image</label>
+                <input type="file" id="image-upload-input" accept="image/*" multiple style="display: none;">
+                <button id="offerTacoButton">Offer a Taco</button>
+                <button id="giveShinyStoneButton">Give a Shiny Stone</button>
+                <button id="offerWarmBlanketButton">Offer a Warm Blanket</button>
+                <button id="singLullabyButton">Sing a Lullaby</button>
+                <button id="tellJokeButton">Tell a Funny Joke</button>
+                <button id="complimentButton">Give a Compliment</button>
+                <button id="scratchEarsButton">Scratch his Ears</button>
+                <button id="offerBackrubButton">Offer a Backrub</button>
+                <button id="shareSecretButton">Share a Secret</button>
+                <button id="offerComfyPillowButton">Offer a Comfy Pillow</button>
+                <button id="buildFortButton">Build a Pillow Fort Together</button>
+                <button id="playFetchButton">Play Fetch</button>
+                <button id="offerMassageButton">Offer a Massage</button>
+                <button id="makeHotChocolateButton">Make Hot Chocolate</button>
+                <button id="readStoryButton">Read Him a Story</button>
+                <button id="offerHeadphonesButton">Offer Noise-Canceling Headphones</button>
+                <button id="giveFigurineButton">Give a Cool Figurine</button>
+                <button id="offerGuidedMeditationButton">Offer Guided Meditation</button>
+                <button id="offerSoftBrushButton">Offer a Soft Brush</button>
+                <button id="offerFavoriteGameButton">Offer His Favorite Game</button>
+                <button id="offerSnuggleButton">Offer a Snuggle (careful!)</button>
+                <button id="offerNewPizzaButton">Offer a Brand New Pizza</button>
+            </div>
+
+            <!-- Neutral Actions Section -->
+            <div class="button-section neutral-section">
+                <h3>Neutral Actions</h3>
+                <button id="pineapple-button">Offer Pineapple</button>
+                <button id="broccoli-button">Offer Broccoli</button>
+                <button id="sushi-button">Offer Sushi</button>
+                <button id="sandwich-button">Offer Sandwich</button>
+                <button id="carrot-button">Offer Carrot</button>
+                <button id="salad-button">Offer Salad</button>
+                <button id="water-button">Offer Water</button>
+                <button id="empty-box-button">Offer Empty Box</button>
+                <button id="opposite-day-button">Say "Nyanwolf it's opposite day!"</button>
+                <button id="lemon-button">Give him Lemons</button>
+                <button id="eat-everything-button">Nyanwolf eats literally everything</button>
+                <button id="offerRubberChickenButton">Offer a Rubber Chicken</button>
+                <button id="showWeatherReportButton">Show the Weather Report</button>
+                <button id="givePlainRockButton">Give a Plain Rock</button>
+                <button id="offerUsedSockButton">Offer a Used Sock</button>
+                <button id="showSpreadsheetButton">Show a Spreadsheet</button>
+                <button id="giveDryCrackerButton">Give a Dry Cracker</button>
+                <button id="offerTapWaterButton">Offer Tap Water</button>
+                <button id="giveSmallStickButton">Give a Small Stick</button>
+                <button id="showBlankWallButton">Point at a Blank Wall</button>
+                <button id="offerDustBunnyButton">Offer a Dust Bunny</button>
+                <button id="giveCalculatorButton">Give a Calculator</button>
+                <button id="offerPieceOfPaperButton">Offer a Piece of Paper</button>
+                <button id="showEncyclopediaButton">Show an Encyclopedia</button>
+                <button id="giveBentSpoonButton">Give a Bent Spoon</button>
+            </div>
+
+            <!-- Evil Actions Section -->
+            <div class="button-section evil-section">
+                <h3>Evil Actions</h3>
+                <button id="strangle-button">Strangle Him</button>
+                <button id="drown-button">Drown Him</button>
+                <button id="kill-button">Kill Him</button>
+                <button id="worm-button">Offer Worm</button>
+                <button id="mealworms-button">Offer Mealworms</button>
+                <button id="strange-elixir-button">Offer Strange Elixir</button>
+                <button id="blood-button">Offer Blood</button>
+                <button id="mystery-ooze-button">Offer Mystery Ooze</button>
+                <button id="spill-soda-button">Accidentally Spill Soda</button>
+                <button id="expired-food-button">Offer Expired Food</button>
+                <button id="boop-nose-button">Boop his Nose</button>
+                <button id="mud-button">Offer Mud</button>
+                <button id="rock-button">Offer Rock</button>
+                <button id="nsfw-fanart-button">Show him NSFW Fanart</button>
+                <button id="stealHisPizzaButton">Attempt to Steal His Pizza</button>
+                <button id="offerPoisonedAppleButton">Offer a Poisoned Apple</button>
+                <button id="tellBadJokeButton">Tell a Really Bad Joke</button>
+                <button id="hideRemoteButton">Hide the TV Remote</button>
+                <button id="replaceFillingButton">Replace Pizza Filling with Mush</button>
+                <button id="fartLoudlyButton">Fart Loudly Near Him</button>
+                <button id="pokeEyeButton">Poke his Eye (careful!)</button>
+                <button id="pullTailButton">Pull His Tail (VERY careful!)</button>
+                <button id="offerSpicyPepperButton">Offer a Ghost Pepper</button>
+                <button id="singOffKeyButton">Sing Terribly Off-Key</button>
+                <button id="pourSaltButton">Pour Salt in his Water</button>
+                <button id="giveFakePizzaButton">Give a Fake Plastic Pizza</button>
+                <button id="sprayWaterButton">Spray Him with Water</button>
+            </div>
+
+            <!-- Very Evil Actions Section -->
+            <div class="button-section very-evil-section">
+                <h3>Very Evil Actions</h3>
+                <button id="nuke-button">Drop Nuclear Bomb</button>
+                <button id="void-button">Cast Into The Void</button>
+                <button id="delete-button">Delete His Existence</button>
+                <button id="curse-button">Eternal Curse</button>
+                <button id="betray-button">Ultimate Betrayal</button>
+                <button id="destroyPizzaButton">Destroy His Pizza</button>
+                <button id="lockInRoomButton">Lock Him in a Small Room</button>
+                <button id="eraseMemoriesButton">Erase His Memories</button>
+                <button id="turnIntoBroccoliButton">Attempt to Turn Him Into Broccoli</button>
+                <button id="forceListenToBieberButton">Force Him to Listen to Justin Bieber</button>
+                <button id="sendToMarsButton">Send Him to Mars</button>
+                <button id="introduceToHisCloneButton">Introduce Him to a More Handsome Clone</button>
+                <button id="replaceVoiceWithSqueaksButton">Replace His Voice with Squeaks</button>
+                <button id="trapInGameButton">Trap Him in a Terrible Mobile Game</button>
+            </div>
+
+            <!-- Revival Section -->
+            <div class="button-section revival-section">
+                <h3>Revival Actions</h3>
+                <button id="revive-button">Revive Him</button>
+                <button id="phoenix-down-button">Use Phoenix Down</button>
+                <button id="healing-potion-button">Use Healing Potion</button>
+                <button id="1up-mushroom-button">Give 1-UP Mushroom</button>
+                <button id="divine-intervention-button">Divine Intervention</button>
+                <button id="cpr-button">Perform CPR</button>
+            </div>
+        </div>
+
+        <!-- Section for creating custom buttons -->
+        <div class="custom-button-container">
+            <h2>Create Custom Button</h2>
+            <input type="text" id="custom-button-text" placeholder="Enter button text (e.g., Offer a Banana)">
+            <button id="create-custom-button">Create Button</button>
+        </div>
+
+        <div class="autoclicker-container">
+            <h2>Autoclicker</h2>
+            <input type="text" id="autoclicker-button-text" placeholder="Enter button text to auto-click">
+            <div class="autoclicker-controls">
+                <button id="start-autoclicker" class="autoclicker-btn">Start Autoclicker</button>
+                <button id="stop-autoclicker" class="autoclicker-btn" disabled>Stop Autoclicker</button>
+            </div>
+            <p class="autoclicker-status">Status: Inactive</p>
+        </div>
+
+        <p>made by fouadd</p>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
