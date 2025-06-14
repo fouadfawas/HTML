@@ -1,0 +1,165 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Spinning Cube with Effects</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            margin: 0;
+            perspective: 600px;
+            overflow: hidden;
+            font-family: 42px sans-serif;
+        }
+
+        .scene {
+            width: 200px;
+            height: 200px;
+            position: relative;
+        }
+
+        .cube {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            transform-style: preserve-3d;
+        }
+
+        .face {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            background: #ff00ff;
+            border: 2px solid #fff;
+            transition: background-color 0.5s;
+        }
+
+        .front  { transform: translateZ(100px); }
+        .back   { transform: rotateY(180deg) translateZ(100px); }
+        .right  { transform: rotateY(90deg) translateZ(100px); }
+        .left   { transform: rotateY(-90deg) translateZ(100px); }
+        .top    { transform: rotateX(90deg) translateZ(100px); }
+        .bottom { transform: rotateX(-90deg) translateZ(100px); }
+
+        /* Glow effect */
+        .scene::after {
+            content: "";
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(255, 0, 255, 0.5), rgba(0, 0, 0, 0));
+            filter: blur(80px);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+
+        /* Skybox */
+        .skybox {
+            position: fixed;
+            width: 100vw;
+            height: 100vh;
+            transform-style: preserve-3d;
+            position: absolute;
+            transform: translateZ(-300px);
+        }
+
+        .title {
+            position: absolute;
+            top: 50px;
+            color: #ffffff;
+            font-size: 72px;
+            text-shadow: 0 0 40px #ff00ff, 0 0 10px #ff00ff;
+            text-align: center;
+            width: 100%;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .click-to-play {
+            position: fixed;
+            top: 100%;
+            height: 100vh;
+            cursor: pointer;
+            z-index: 1000;
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">Cube of Everything</div>
+    <div class="skybox"></div>
+    <div class="scene">
+        <div class="cube">
+            <div class="face front"></div>
+            <div class="face back"></div>
+            <div class="face right"></div>
+            <div class="face left"></div>
+            <div class="face top"></div>
+            <div class="face bottom"></div>
+        </div>
+    </div>
+    <audio id="bg" loop>
+        <source src="THE WORLD REVOLVING.mp3" type="audio/mpeg">
+    </audio>
+    <div class="click-to-play"></div>
+    <script>
+        const audio = document.getElementById('bg');
+
+        function handleCliclk() {
+            audio.play();
+            document.querySelector('.click-to-play').style.display = 'none';
+            document.removeEventListener('click', handleCliclk);
+        }
+
+        audio.addEventListener('click', handleCliclk);
+
+        // If audio isn't playing due to autoplay, show click
+        audio.onabort = (e) => {
+            document.querySelector('.click-to-play').style.display = 'block';
+        };
+
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        const cube = document.querySelector('.cube');
+        const faces = document.querySelectorAll('.face');
+        const skybox = document.querySelector('.skybox');
+        
+        let angleX = 0;
+        let angleY = 0;
+        let skyboxAngleX = 0;
+        let skyboxAngleY = 0;
+
+        function updateAnimation() {
+            angleX += 1;
+            angleY += 1;
+            skyboxAngleX += 0.3;
+            skyboxAngleY += 0.3;
+            
+            cube.style.transform = `rotateX(${angleX}deg) rotateY(${angleY}deg)`;
+            skybox.style.transform = `translateZ(-300px) rotateX(${skyboxAngleX}deg) rotateY(${skyboxAngleY}deg)`;
+            
+            faces.forEach(face => {
+                face.style.backgroundColor = getRandomColor();
+            });
+
+            requestAnimationFrame(updateAnimation);
+        }
+
+        document.addEventListener('click', handleCliclk);
+        updateAnimation();
+    </script>
+</body>
+</html>

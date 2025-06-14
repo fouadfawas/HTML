@@ -1,0 +1,595 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HÜÏGHŒVÑÏGËHGËÍHGBØΜ¶ŒBÏHØŒΜ</title>
+  <style>
+    html, body {
+      margin: 0; padding: 0; width: 100vw; height: 100vh; overflow: hidden;
+      background: radial-gradient(ellipse at 60% 40%, #ddd 60%, #080838 120%);
+      font-family: 'Comic Sans MS', cursive, fantasy;
+      user-select: none;
+    }
+    #strange-canvas {
+      display: block;
+      width: 100vw; height: 100vh; position: absolute; left: 0; top: 0;
+      pointer-events: none;
+    }
+    /* DOSE FONT for warning */
+    @font-face {
+      font-family: 'ModernDOS';
+      src: url("ModernDOS9x16.ttf") format("truetype");
+      font-weight: normal;
+      font-style: normal;
+    }
+    /* Warning banner styles */
+    #warning-banner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      background: none;
+      color: #d00;
+      font-family: 'ModernDOS', monospace;
+      font-size: 1.6vw;
+      text-align: center;
+      z-index: 10000;
+      padding: 0.5vw 0 0.3vw 0;
+      letter-spacing: 0.02em;
+      text-shadow: none;
+      border-bottom: none;
+      box-shadow: none;
+      pointer-events: none;
+      user-select: none;
+      animation: none;
+    }
+    #word {
+      position: absolute;
+      left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 7vw;
+      font-weight: bold;
+      color: #aef;
+      filter: drop-shadow(0 0 15px #00bfff77);
+      mix-blend-mode: lighten;
+      word-break: break-all;
+      text-align: center;
+      cursor: pointer;
+      animation: distort 2.4s infinite alternate ease-in-out;
+      transition: color 0.4s;
+      /* Out-of-place effect: */
+      background: linear-gradient(130deg, #fffbcc 40%, #ffbced 90%, #cfffea 110%);
+      box-shadow:
+        0 0 0 16px #fff3  ,
+        0 0 16px 18px #fcff73c9,
+        0 0 0px 30px #0236ff14,
+        6px 8px 30px 0 #fb9;
+      border-radius: 3vw 8vw 2vw 10vw / 7vw 3vw 9vw 2vw;
+      outline: 4px dashed #90f0f9;
+      outline-offset: -20px;
+      border: 6px solid #ff8de533;
+      text-shadow:
+         4px -1px 0 #ff23cf,
+         -4px 2px 0 #43f,
+         3px 6px 16px #fff, 
+         0 0 1vw #fff1;
+      opacity: 0.88;
+      transform: translate(-50%, -50%) skew(-7deg, 12deg) rotate(13deg) scale(1.05, 0.93);
+      clip-path: polygon(5% 12%, 95% 4%, 100% 90%, 10% 100%);
+      z-index: 11;
+      /* flashing border, superimposed glitch look */
+      animation:
+        distort 2.4s infinite alternate ease-in-out,
+        outplaceborderflash 1.9s infinite alternate cubic-bezier(.36,2,.55,.4);
+      /* degrade legibility a bit for off-ness */
+      filter: drop-shadow(0 0 15px #00bfff77)
+              contrast(1.23) saturate(1.5) hue-rotate(51deg)
+              blur(0.4px);
+
+    }
+    @keyframes distort {
+      to {
+        letter-spacing: 0.2em;
+        filter: drop-shadow(0 0 30px #0ff);
+        color: #ffcaff;
+        font-variation-settings: "wght" 920;
+        background: linear-gradient(100deg, #cfffea 20%, #ffbced 70%, #fffbcc 120%);
+        border-radius: 10vw 2vw 16vw 6vw / 4vw 13vw 3vw 10vw;
+        outline-color: #ffbffbf7;
+        transform: translate(-50%, -50%) skew(5deg,-7deg) rotate(-15deg) scale(0.93,1.11);
+      }
+    }
+    @keyframes outplaceborderflash {
+      0%   { border-color: #e39cff; outline-color: #90f0f9; }
+      35%  { border-color: #ebff90; outline-color: #ffbffb; }
+      52%  { border-color: #aef2f6; outline-color: #f9fa7f; }
+      75%  { border-color: #f9aefc; outline-color: #80fffb; }
+      100% { border-color: #fff591; outline-color: #b194ff; }
+    }
+
+    #strange-btn {
+      position: absolute;
+      right: 2vw; bottom: 2vw;
+      font-size: 2vw;
+      background: #fff9;
+      color: #500966;
+      border: 0.2em solid #d49aff;
+      border-radius: 5vw;
+      padding: 1vw 2vw;
+      cursor: pointer;
+      outline: none;
+      z-index: 2;
+      transition: background 0.2s;
+      font-family: inherit;
+    }
+    #strange-btn:active {
+      background: #d3ffdd;
+      color: #339966;
+      transform: scale(1.08) rotate(-3.5deg);
+    }
+    /* Font list for animation */
+    @font-face { font-family: "Baloo"; src: url('https://fonts.gstatic.com/s/baloo2/v16/wXKvE3UZookzsxz_kjGS3Q.ttf') format('truetype'); }
+    @font-face { font-family: "Orbitron"; src: url('https://fonts.gstatic.com/s/orbitron/v31/yMJRMIlzdpvBhQQL_Qq7dy3USBnSvpkopQaUR-2r7iU.ttf') format('truetype'); }
+    @font-face { font-family: "Rubik Glitch"; src: url('https://fonts.gstatic.com/s/rubikglitch/v15/_7mrA5cW3FEO7qVp5h5lCNwwDrE0UA.woff2') format('woff2'); }
+    @font-face { font-family: "Bungee"; src: url('https://fonts.gstatic.com/s/bungee/v17/N0bU2SZBIuF2PU_ECn50Kd_Pk4g.ttf') format('truetype'); }
+    @font-face { font-family: "Creepster"; src: url('https://fonts.gstatic.com/s/creepster/v17/AlZy_zVUqJz4yMrniH4hdX6Pe8D3.ttf') format('truetype'); }
+    @font-face { font-family: "Monoton"; src: url('https://fonts.gstatic.com/s/monoton/v24/5h1aiZUrOngCibe4fkA.ttf') format('truetype'); }
+    @font-face { font-family: "Press Start 2P"; src: url('https://fonts.gstatic.com/s/pressstart2p/v15/e3t4euO8KNyFZR_FEZxHPSeCacQyS2A.ttf') format('truetype'); }
+    @font-face { font-family: "Fruktur"; src: url('https://fonts.gstatic.com/s/fruktur/v21/AMOWz4SXrmKHC6LSxg.ttf') format('truetype'); }
+    @font-face { font-family: "Major Mono Display"; src: url('https://fonts.gstatic.com/s/majormonodisplay/v20/RWmVoLyb5fEqtsfBX9PDZIGr2tFubRh7.ttf') format('truetype'); }
+    @font-face { font-family: "Staatliches"; src: url('https://fonts.gstatic.com/s/staatliches/v16/HI_OiY8KO6hCsQSoAPmtMYeVvpCfOMPTjMY.ttf') format('truetype'); }
+    @font-face { font-family: "Comic Sans MS"; src: local("Comic Sans MS"), local("ComicSansMS"); }
+  </style>
+</head>
+<body>
+<canvas id="strange-canvas"></canvas>
+<div id="word">hüïghœvñïgëhgëíhgbøµ¶œbïhøœµïhµøïhbµ¿µvhøïµïhøµœhï¶µïhüµïhgœµghµóïïhµïhœúíœï¶hóœµœïhóµœhøïíµúhµíïhµhµñhgvñvhgíúïµhgívœúµhgívóµñgvhïbïhœµïïhœµbïhœóíµóhíœïµhïóíúbµhbïbvhïóœµvíhïµbhïœµóíúïµbhíbhµïúbhµïbhµvhvïµïhgµïhµóbhµçïbóíµóíúgvhµvœ</div>
+<button id="strange-btn">übhø click?</button>
+<script type="importmap">
+{
+  "imports": {
+    "howler": "https://cdn.jsdelivr.net/npm/howler@2.2.4/dist/howler.min.js"
+  }
+}
+</script>
+<script type="module">
+import "howler";
+
+// --- Multi-language random word generators ---
+const randomLangConfigs = [
+  {
+    name: "Finnish",
+    words: [
+      "kissa", "koira", "aurinko", "vesi", "puu", "juna", "hymy", "lamppu",
+      "ihana", "sininen", "sataa", "omena", "metsä", "ystävä", "kaupunki", "tuuli",
+      "tie", "nauraa", "taivas", "valo", "sydän", "tai", "lehti", "juna", "uni"
+    ]
+  },
+  {
+    name: "Yoruba",
+    words: [
+      "ẹja", "omi", "ilé", "ẹ̀yà", "ọkùnrin", "obìnrin", "ọjọ́", "ẹ̀bùn",
+      "adúrà", "igba", "ọrẹ", "iṣẹ́", "ilé", "owó", "àlááfíà", "ọjọ́", "ọsan",
+      "oyè", "omodé", "ọ̀run", "ìrìn", "ẹ̀kọ́", "àánú", "ẹsẹ̀", "ẹyin"
+    ]
+  },
+  {
+    name: "Khmer",
+    words: [
+      "សៀវភៅ", "ចំហាយ", "កូនខ្មែរ", "ក្រុង", "តារា", "ព្រះថ្ងៃ", "ទឹក", "ផ្លូវ",
+      "រាំ", "សួស្តី", "បេះដូង", "ប្រាក់", "បាយ", "ប្អូន", "មិត្ត", "ផ្លែឈើ",
+      "ស្នេហា", "ចិន្តា", "ដើមឈើ", "សួន", "ក្ដារ", "កាំបិត", "កាំបាច់", "ទូរស័ព្ទ"
+    ]
+  },
+  {
+    name: "Welsh",
+    words: [
+      "cariad", "draig", "afal", "coed", "bore", "nos", "enfys", "tywydd",
+      "dwr", "plentyn", "ysgol", "car", "pethau", "seren", "ty", "bwyd",
+      "ffrind", "hufen", "lleuad", "awr", "glas", "llaw", "llyfr", "llong"
+    ]
+  },
+  {
+    name: "Maori",
+    words: [
+      "manu", "moana", "rangi", "whanau", "ahi", "kai", "whenua", "wera",
+      "whare", "marama", "wai", "aroha", "tama", "tama", "kainga", "haere",
+      "mata", "pukapuka", "karakia", "whenua", "maunga", "hōiho", "ra", "rākau"
+    ]
+  },
+  {
+    name: "Uzbek",
+    words: [
+      "kitob", "daryo", "togʻ", "quyosh", "oy", "doʻst", "shahar", "daraxt",
+      "bolalar", "makon", "qoʻl", "olma", "yaxshi", "toza", "ushbu", "kun",
+      "tun", "yorugʻ", "tinchlik", "koʻl", "maktab", "hayot", "quvonch", "gʻalaba"
+    ]
+  }
+];
+
+// --- Original odd letter generator ---
+function randomStr(len) {
+  let chars = "hüïghœvñëígbøµ¶œbøµvhµ¿çvóúíñbæσλʒζøøµπ";
+  let s = "";
+  for (let i=0;i<len;i++) s += chars[Math.floor(Math.random()*chars.length)];
+  return s;
+}
+
+// Helper: Pick n random words from array
+function pickWords(words, nMin, nMax) {
+  let result = [];
+  const nWords = nMin + Math.floor(Math.random()*(nMax-nMin+1));
+  for(let i=0;i<nWords;i++) {
+    result.push(words[Math.floor(Math.random()*words.length)]);
+  }
+  return result.join(' ');
+}
+
+const wordDiv = document.getElementById('word');
+const canvas = document.getElementById('strange-canvas');
+const ctx = canvas.getContext('2d');
+let W = canvas.width = window.innerWidth;
+let H = canvas.height = window.innerHeight;
+let clickCount = 0;
+
+window.addEventListener('resize', () => {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+});
+
+// Words for more variety (sometimes use these)
+const sampleWords = [
+  "hüïghœvñïgëhgë", "çvnøµœ", "μμμvhb", "gøµõeë", "ßücørb", "œighv", 
+  "øµhgív", "bøgh", "µïhv", "çvøœµ", "ïhgµ", "µλλgh", "bhüí", "vhgñv", "üµhgí" 
+];
+
+// --- Modified autoChangeText to insert multilingual text randomly ---
+function autoChangeText() {
+  // 17% of the time, show a string of random words in a random supported language
+  if (Math.random() < 0.17) {
+    const langObj = randomLangConfigs[Math.floor(Math.random()*randomLangConfigs.length)];
+    // random length between 6 and 14 words
+    const phrase = pickWords(langObj.words, 6, 14);
+    wordDiv.textContent = phrase;
+    // Occasionally add a language name prefix for more "weirdness"
+    if (Math.random() < 0.24) {
+      wordDiv.textContent = "[" + langObj.name + "] " + wordDiv.textContent;
+    }
+    // Unique styles for language
+    wordDiv.style.letterSpacing = (Math.random()*0.08).toFixed(2) + "em";
+    wordDiv.style.lineHeight = (1 + Math.random()*0.8).toFixed(2);
+    // Glitch: sometimes mix again with oddletters
+    if (Math.random()<0.09) {
+      wordDiv.textContent += " " + randomStr(3+Math.floor(Math.random()*9));
+    }
+  }
+  // -- otherwise: old modes
+  else {
+    const mode = Math.random();
+    if (mode < 0.33) {
+      wordDiv.textContent = randomStr(30 + Math.floor(Math.random()*30));
+    } else if (mode < 0.47) {
+      let w1 = sampleWords[Math.floor(Math.random()*sampleWords.length)];
+      let w2 = sampleWords[Math.floor(Math.random()*sampleWords.length)];
+      let n = 8 + Math.floor(Math.random()*6);
+      wordDiv.textContent = Array.from({length: n}, () => (Math.random() > 0.3 ? w1 : w2)).join("");
+    } else {
+      let base = wordDiv.textContent;
+      let arr = base.split("");
+      let swaps = 2 + Math.floor(Math.random()*4);
+      for(let i=0;i<swaps;i++) {
+        let idx = Math.floor(Math.random()*arr.length);
+        if(Math.random()<0.6) {
+          arr[idx] = randomStr(1);
+        } else {
+          let idx2 = Math.floor(Math.random()*arr.length);
+          let t = arr[idx];
+          arr[idx] = arr[idx2];
+          arr[idx2] = t;
+        }
+      }
+      wordDiv.textContent = arr.join("");
+    }
+    // Also change style in a small way
+    wordDiv.style.letterSpacing = (Math.random()*0.3).toFixed(2) + "em";
+    wordDiv.style.lineHeight = (1 + Math.random()*1.2).toFixed(2);
+    if(Math.random()<0.25) {
+      let txt = wordDiv.textContent;
+      let idx = 3 + Math.floor(Math.random()*(txt.length-4));
+      wordDiv.textContent = txt.slice(0,idx) + " " + txt.slice(idx);
+    }
+    if(Math.random()<0.07) clickEffect();
+  }
+}
+setInterval(autoChangeText, 190 + Math.random()*180);
+
+function wiggleText() {
+  let base = wordDiv.textContent;
+  let arr = base.split('');
+  if (Math.random()<0.14 && arr.length > 0) {
+    let idx = Math.floor(Math.random()*arr.length);
+    arr[idx] = randomStr(1);
+    wordDiv.textContent = arr.join('');
+  }
+}
+setInterval(wiggleText, 400);
+
+function drawWeirdStuff(t) {
+  ctx.clearRect(0,0,W,H);
+  // Rotating gradient globs
+  let n = 7, r = W/5;
+  ctx.save();
+  ctx.translate(W/2, H/2);
+  for (let i=0;i<n;i++) {
+    let a = t/2300 + i*2*Math.PI/n;
+    let x = Math.cos(a)*r*1.7;
+    let y = Math.sin(a)*r*1.2;
+    let grd = ctx.createRadialGradient(x,y,10, x,y,110);
+    grd.addColorStop(0, `hsla(${(a*253)%360},72%,79%,0.55)`);
+    grd.addColorStop(1, "transparent");
+    ctx.beginPath();
+    ctx.arc(x,y,110,0,2*Math.PI);
+    ctx.fillStyle = grd;
+    ctx.fill();
+  }
+  ctx.restore();
+  
+  // Floating vowels
+  let vowels = "üïœøöëóúíæ";
+  for (let i=0; i<4; i++) {
+    ctx.save();
+    let theta = t/1400 + i*2;
+    ctx.font = `${80+Math.sin(theta*1.4+i)*55}px Comic Sans MS`;
+    ctx.globalAlpha = 0.49+Math.abs(Math.sin(theta*1.1+i*2))*0.27;
+    ctx.fillStyle = `hsla(${220+i*40+Math.sin(theta*4)*60},90%,70%,1)`;
+    ctx.translate(W/2 + Math.sin(theta+i)*W/4, H/2+Math.cos(theta-i)*H/4.7);
+    ctx.rotate(Math.sin(theta*1.8+i)*0.36);
+    ctx.fillText(vowels[i], 0, 0);
+    ctx.restore();
+  }
+  // Little moving squares with random symbols
+  for (let i=0; i<18; i++) {
+    let x = (Math.abs(Math.sin(t/384+i*37.7))*1.1)%1 * W;
+    let y = (Math.abs(Math.cos(t/238-i*19.2))*1.2)%1 * H;
+    ctx.save();
+    ctx.translate(x,y);
+    ctx.rotate(Math.sin(i+t/800)*2);
+    ctx.font = `${24+8*Math.sin(i*2.4+t/370)}px serif`;
+    ctx.globalAlpha = 0.7;
+    ctx.fillStyle = ["#f2c","#4ff","#0a6","#fea","#07ffff","#eeefff"][i%6];
+    ctx.fillText("µγæσλ⌇√".split("")[i%6],0,0);
+    ctx.restore();
+  }
+}
+
+function loop(ts) {
+  drawWeirdStuff(ts);
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+// WHACKY AUDIO!
+const strangeNotes = [232.5, 416.2, 311.8, 131.2, 403.0, 208.5, 712.4];
+const ctxAudio = new(window.AudioContext||window.webkitAudioContext)();
+function playOdd(jump=0) {
+  let osc = ctxAudio.createOscillator();
+  let gain = ctxAudio.createGain();
+  osc.type = ["sine","triangle","sawtooth","square"][Math.floor(Math.random()*4)];
+  let f = strangeNotes[Math.floor(Math.random()*strangeNotes.length)] + Math.sin(Date.now())*jump;
+  osc.frequency.value = f;
+  gain.gain.value = 0.14+Math.random()*0.21;
+  osc.connect(gain).connect(ctxAudio.destination);
+  osc.start();
+  setTimeout(()=>osc.stop(), 370+Math.random()*140);
+}
+
+function clickEffect() {
+  // Scramble word and color
+  wordDiv.textContent = randomStr(30+Math.floor(Math.random()*30));
+  wordDiv.style.color = `hsl(${Math.random()*360}, 100%, 70%)`;
+  wordDiv.style.fontSize = `${5+Math.random()*7}vw`;
+  // Glitch effect
+  wordDiv.style.transform = `translate(-50%,-50%) scale(${0.97+Math.random()*0.18}) rotate(${Math.random()*14-7}deg)`;
+  setTimeout(() =>
+    wordDiv.style.transform = "translate(-50%,-50%)", 180
+  );
+  // Play a couple weird tones
+  playOdd(Math.random()*222);
+  setTimeout(()=>playOdd(Math.random()*330), 70);
+  clickCount++;
+  if (clickCount % 4 == 0) {
+    // spawn a floating word
+    spawnFloatingWord();
+  }
+}
+
+// Floating random word
+function spawnFloatingWord() {
+  let el = document.createElement("div");
+  el.textContent = randomStr(6+Math.floor(Math.random()*13));
+  el.style.position = "absolute";
+  el.style.left = Math.random()*98+"vw";
+  el.style.top = Math.random()*88+"vh";
+  el.style.fontSize = (3+Math.random()*4)+"vw";
+  el.style.color = `hsl(${Math.random()*360}, 100%, 60%)`;
+  el.style.opacity = 0.85;
+  el.style.filter = "blur(1px) drop-shadow(0 0 3vw #fff5)";
+  el.style.zIndex = 10;
+  el.style.userSelect = "none";
+  el.style.pointerEvents = "none";
+  document.body.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = "opacity 2.1s";
+    el.style.opacity = 0;
+    setTimeout(()=>el.remove(), 2200);
+  }, 500+Math.random()*600);
+}
+
+// FONTS for maximum strangeness
+const weirdFonts = [
+  "Comic Sans MS, cursive, fantasy",
+  "'Baloo', cursive",
+  "'Orbitron', sans-serif",
+  "'Creepster', cursive",
+  "'Rubik Glitch', cursive, sans-serif",
+  "'Bungee', cursive",
+  "'Monoton', cursive",
+  "'Fruktur', cursive",
+  "'Press Start 2P', monospace",
+  "'Major Mono Display', monospace",
+  "'Staatliches', sans-serif",
+  // System/weird fallbacks:
+  "Impact, fantasy",
+  "Papyrus, fantasy",
+  "'Times New Roman', serif",
+  "Arial Black, Gadget, sans-serif",
+  "Courier, monospace",
+  "Verdana, Geneva, sans-serif",
+  "system-ui, sans-serif",
+  "serif",
+  "monospace"
+];
+
+// Animate font changing
+function updateFontContinuous() {
+  // Intervals for how frequently we swap the font
+  const baseDelay = 110 + Math.random()*310;
+  setTimeout(() => {
+    if (Math.random() < 0.86) { // most of the time, change font
+      let fidx = Math.floor(Math.random() * weirdFonts.length);
+      wordDiv.style.fontFamily = weirdFonts[fidx];
+    }
+    // Allow "font-variation-settings" to stay random sometimes
+    wordDiv.style.fontWeight = 300 + Math.floor(Math.random()*800);
+    // Sometimes force italic or not
+    wordDiv.style.fontStyle = (Math.random() > 0.8 ? "italic" : "normal");
+    // Slight text shadow weirdness
+    wordDiv.style.textShadow = Math.random() > 0.7 ?
+      "0 0 25px #fa7,0 0 7px #fff,0 1px 0 #0009" :
+      "0 0 15px #00bfff77";
+    // Keep looping
+    updateFontContinuous();
+  }, baseDelay);
+}
+updateFontContinuous();
+
+// Add further out-of-place style mutations:
+const outOfPlaceStyles = [
+  // Out of alignment
+  () => {
+    wordDiv.style.transform = `translate(-50%,-50%) skew(${Math.random()*30-15}deg,${Math.random()*30-15}deg) rotate(${Math.random()*35-17}deg) scale(${0.8+Math.random()*0.6}, ${0.7+Math.random()*0.7})`;
+    wordDiv.style.clipPath = "polygon(7% 18%, 98% 8%, 100% 93%, 13% 97%)";
+    wordDiv.style.outlineOffset = (-10-Math.random()*25)+"px";
+  },
+  // Hard shadow
+  () => {
+    wordDiv.style.textShadow = '8px 8px 0 #ff0, -5px -3px 1px #0ff, 2px 2px 1vw #f0f, 0 0 10px #fff8';
+    wordDiv.style.filter = "contrast(1.37) blur(.9px) hue-rotate(" + (Math.random()*180) + "deg)";
+  },
+  // Pure odd border and shape
+  () => {
+    wordDiv.style.borderRadius = `${Math.random()*12}vw ${Math.random()*9}vw ${Math.random()*17}vw ${Math.random()*10}vw / ${Math.random()*12}vw ${Math.random()*9}vw ${Math.random()*17}vw ${Math.random()*10}vw`;
+    wordDiv.style.boxShadow = `0 0 0 16px #fff3 , 0 0 16px 18px ${Math.random()<0.5?"#fcff73c9":"#90c3ffcf"},0 0 15px 24px #beffb0c7`;
+    wordDiv.style.background = `linear-gradient(${60+Math.random()*190}deg, #${Math.floor(Math.random()*0xffffff).toString(16).padStart(6,'0')} 0%, #${Math.floor(Math.random()*0xffffff).toString(16).padStart(6,'0')} 100%)`;
+  },
+  // Skewed and faded/ghost effect
+  () => {
+    wordDiv.style.opacity = 0.69 + Math.random()*0.24;
+    wordDiv.style.filter = "blur("+(Math.random()*1.8+0.5)+"px) grayscale("+(0.05+Math.random()*0.52)+")";
+    wordDiv.style.border = "4px double #c6e4ff";
+    wordDiv.style.background = "#fff8";
+  },
+  // Make illegible retro
+  () => {
+    wordDiv.style.textShadow = "0 0 0.25vw #ff0, 1vw 0 #000, 0 1vw #b0f, -1vw 0 #0ff";
+    wordDiv.style.color = "#ff0";
+    wordDiv.style.background = "repeating-linear-gradient(-77deg,#fff,#fad, #b0f 4vw)";
+    wordDiv.style.filter = "brightness(1.24) contrast(.88) blur(.7px)";
+  }
+];
+
+// Call a random out-of-place style change at intervals
+function outOfPlaceMutate() {
+  // Sometimes clear all to base:
+  if (Math.random()<0.1) {
+    wordDiv.style.transform = "translate(-50%, -50%)";
+    wordDiv.style.opacity = 0.88;
+    wordDiv.style.background = "";
+    wordDiv.style.textShadow = "";
+    wordDiv.style.boxShadow = "";
+    wordDiv.style.borderRadius = "";
+    wordDiv.style.border = "";
+    wordDiv.style.filter = "";
+    wordDiv.style.clipPath = "";
+    wordDiv.style.outlineOffset = "";
+    wordDiv.style.color = "";
+  }
+
+  // Otherwise apply a random out-of-place style
+  outOfPlaceStyles[Math.floor(Math.random()*outOfPlaceStyles.length)]();
+  setTimeout(outOfPlaceMutate, 560 + Math.random()*800);
+}
+outOfPlaceMutate();
+
+wordDiv.addEventListener('click', clickEffect);
+document.getElementById('strange-btn').addEventListener('click', ()=>{
+  // Change background
+  document.body.style.background = `radial-gradient(circle at ${Math.random()*100}% ${Math.random()*100}%, #${Math.random().toString(16).slice(2,8)}, #222a${Math.floor(Math.random()*10+7)})`;
+  // Play audio and scramble
+  clickEffect();
+  // Flip button label
+  let btn = document.getElementById('strange-btn');
+  btn.textContent = randomStr(5+Math.floor(Math.random()*8));
+});
+
+let persistentOscillators = [];
+let persistentGain = null;
+let baseFreqs = [110, 151, 231, 277, 307, 370, 419, 507, 593, 803, 997, 1177];
+
+function startBackgroundWeirdAudio() {
+  if (persistentOscillators.length > 0) return; // already running
+  persistentGain = ctxAudio.createGain();
+  persistentGain.gain.value = 0.045; // very low, ambient
+
+  // Make 3 oscillators with beating detuned frequency
+  for (let i = 0; i < 3; i++) {
+    let osc = ctxAudio.createOscillator();
+    let freq = baseFreqs[Math.floor(Math.random() * baseFreqs.length)];
+    osc.frequency.value = freq;
+    osc.type = ["sine", "triangle", "sawtooth", "square"][Math.floor(Math.random() * 4)];
+    osc.detune.value = (Math.random() - 0.5) * 72;
+    osc.connect(persistentGain);
+    persistentOscillators.push(osc);
+    osc.start();
+  }
+  persistentGain.connect(ctxAudio.destination);
+
+  // LFO modulates frequency for weirdness
+  let lfo1 = {angle: 0}, lfo2 = {angle: Math.PI/2}, lfo3 = {angle: Math.PI};
+  function lfoAnim() {
+    if (persistentOscillators.length < 3) return; // stopped
+    persistentOscillators[0].frequency.value = baseFreqs[2] + Math.sin(lfo1.angle) * 19 + Math.sin(Date.now()/981)*7;
+    persistentOscillators[1].frequency.value = baseFreqs[5] + Math.cos(lfo2.angle) * 9 + Math.sin(Date.now()/711)*3.1;
+    persistentOscillators[2].frequency.value = baseFreqs[8] + Math.sin(lfo3.angle) * 13 + Math.sin(Date.now()/601)*11.3;
+    lfo1.angle += 0.016 + Math.random() * 0.004;
+    lfo2.angle += 0.009 + Math.random() * 0.005;
+    lfo3.angle += 0.012 + Math.random() * 0.007;
+    persistentGain.gain.value = 0.048 + Math.sin(Date.now() / 837) * 0.011;
+    requestAnimationFrame(lfoAnim);
+  }
+  lfoAnim();
+}
+
+// On user gesture, AudioContext (required by browsers for sound):
+function ensureAudioStarted() {
+  if (ctxAudio.state !== "running") ctxAudio.resume();
+  startBackgroundWeirdAudio();
+}
+window.addEventListener('pointerdown', ensureAudioStarted);
+window.addEventListener('keydown', ensureAudioStarted);
+
+// Try to start audio on load but browsers may block until gesture
+setTimeout(startBackgroundWeirdAudio, 1500);
+</script>
+</body>
+</html>

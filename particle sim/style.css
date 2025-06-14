@@ -1,0 +1,448 @@
+/* Reset and basic styling */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+  overflow: hidden;
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  touch-action: none;
+  user-select: none;
+}
+
+/* Canvas styling */
+canvas {
+  display: block;
+  background: linear-gradient(135deg, #0f0f0f 0%, #1e1e1e 100%);
+  image-rendering: pixelated;
+  width: 100%;
+  height: 100%;
+  cursor: crosshair;
+}
+
+/* Element Selector (Palette) styling */
+#palette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(180deg, rgba(15, 15, 20, 0.95) 0%, rgba(10, 10, 15, 0.85) 100%);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  padding: 8px 16px;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  height: 60px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#palette:hover {
+  background: linear-gradient(180deg, rgba(20, 20, 25, 0.98) 0%, rgba(15, 15, 20, 0.9) 100%);
+}
+
+/* Hide scrollbar */
+#palette::-webkit-scrollbar {
+  display: none;
+}
+
+/* Element Selector Container styling */
+.element-selector-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.tab-button {
+  background: linear-gradient(135deg, rgba(30, 30, 35, 0.6) 0%, rgba(20, 20, 25, 0.8) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #aaa;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left 0.6s;
+}
+
+.tab-button:hover::before {
+  left: 100%;
+}
+
+.tab-button:hover {
+  color: #ddd;
+  border-color: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.tab-button.active {
+  color: #fff;
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  border-color: rgba(74, 144, 226, 0.5);
+  box-shadow: 0 4px 16px rgba(74, 144, 226, 0.3);
+}
+
+/* Content container */
+.content-container {
+  display: flex;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  gap: 3px;
+}
+
+.content-container::-webkit-scrollbar {
+  display: none;
+}
+
+/* Tab content */
+.tab-content {
+  display: none;
+  gap: 3px;
+  align-items: center;
+}
+
+.tab-content.active {
+  display: flex;
+}
+
+/* Element button styling */
+.element-button {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  background: linear-gradient(135deg, rgba(40, 40, 45, 0.8) 0%, rgba(30, 30, 35, 0.9) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.element-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.element-button:hover::before {
+  opacity: 1;
+}
+
+.element-button:hover {
+  background: linear-gradient(135deg, rgba(50, 50, 55, 0.9) 0%, rgba(40, 40, 45, 1) 100%);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.25);
+}
+
+.element-button.selected {
+  border-color: #4A90E2;
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.2) 0%, rgba(53, 122, 189, 0.3) 100%);
+  box-shadow: 0 0 20px rgba(74, 144, 226, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.element-button svg {
+  margin-bottom: 2px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+.element-button span {
+  font-size: 8px;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  user-select: none;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.element-button.selected span {
+  color: #fff;
+}
+
+/* Reset button */
+#reset-button {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  background: linear-gradient(135deg, rgba(60, 30, 30, 0.8) 0%, rgba(40, 20, 20, 0.9) 100%);
+  border: 1px solid rgba(255, 100, 100, 0.3);
+  border-radius: 10px;
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  touch-action: none;
+  margin-left: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+#reset-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 100, 100, 0.1) 0%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+#reset-button:hover::before {
+  opacity: 1;
+}
+
+#reset-button:hover {
+  background: linear-gradient(135deg, rgba(80, 40, 40, 0.9) 0%, rgba(60, 30, 30, 1) 100%);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(255, 50, 50, 0.3);
+  border-color: rgba(255, 100, 100, 0.5);
+}
+
+#reset-button svg {
+  margin-bottom: 2px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+}
+
+#reset-button span {
+  font-size: 8px;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  pointer-events: none;
+  user-select: none;
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Thickness control */
+.thickness-wrapper {
+  display: flex;
+  align-items: center;
+  margin-right: 16px;
+  padding: 0 12px;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.thickness-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.thickness-label {
+  font-size: 10px;
+  color: #aaa;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+}
+
+.thickness-control input[type="range"] {
+  width: 70px;
+  height: 20px;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.thickness-control input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  cursor: pointer;
+  margin-top: -6px;
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.4);
+  transition: all 0.2s;
+}
+
+.thickness-control input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 4px 16px rgba(74, 144, 226, 0.6);
+}
+
+.thickness-control input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%);
+  border-radius: 2px;
+}
+
+.thickness-control input[type="range"]::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 8px rgba(74, 144, 226, 0.4);
+}
+
+.thickness-control input[type="range"]::-moz-range-track {
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.2) 100%);
+  border-radius: 2px;
+  border: none;
+}
+
+/* Tooltip for hover info */
+#hover-info {
+  position: absolute;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(20, 20, 25, 0.95) 0%, rgba(15, 15, 20, 0.9) 100%);
+  backdrop-filter: blur(10px);
+  color: #eee;
+  padding: 6px 12px;
+  font-size: 11px;
+  border-radius: 8px;
+  z-index: 200;
+  display: none;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* Pulse animation for active elements */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.element-button.selected {
+  animation: pulse 2s infinite;
+}
+
+/* Media queries for responsive design */
+@media (max-width: 768px) {
+  #palette {
+    height: 55px;
+    padding: 6px 12px;
+  }
+  
+  .element-button, #reset-button {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .thickness-control input[type="range"] {
+    width: 60px;
+  }
+  
+  .tab-button {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  #palette {
+    height: 50px;
+    padding: 4px 8px;
+  }
+  
+  .element-button, #reset-button {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .thickness-wrapper {
+    margin-right: 8px;
+    padding: 0 8px;
+  }
+  
+  .thickness-control input[type="range"] {
+    width: 50px;
+  }
+  
+  .tab-button {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+  
+  .element-button span, #reset-button span {
+    font-size: 7px;
+  }
+}
+
+/* Smooth transitions for all interactive elements */
+* {
+  transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom scrollbar for webkit browsers */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0.1) 100%);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.2) 100%);
+}

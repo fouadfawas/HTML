@@ -1,0 +1,211 @@
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Ultimate Falling Sand Simulation</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <!-- Top Element Selector Panel (always expanded along the top) -->
+    <div id="palette">
+      <div class="element-selector-container">
+        <div class="tabs">
+          <button class="tab-button active" data-category="particulates">Particulates</button>
+          <button class="tab-button" data-category="liquids">Liquids</button>
+          <button class="tab-button" data-category="energetic">Energetic</button>
+          <button class="tab-button" data-category="structures">Structures</button>
+        </div>
+        <div class="content-container">
+          <div class="tab-content active" data-category="particulates">
+            <!-- Particulates: Sand (1), Mud (18), Snow (19) -->
+            <button class="element-button selected" data-element="1">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#DAC4A0"></circle>
+              </svg>
+              <span>Sand</span>
+            </button>
+            <button class="element-button" data-element="18">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#8B4513"></circle>
+              </svg>
+              <span>Mud</span>
+            </button>
+            <button class="element-button" data-element="19">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#E0F7FF"></circle>
+              </svg>
+              <span>Snow</span>
+            </button>
+          </div>
+          <div class="tab-content" data-category="liquids">
+            <!-- Liquids: Water (2), Oil (3), Acid (6), Lava (7), Slime (25) -->
+            <button class="element-button" data-element="2">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#71B9F0"></circle>
+              </svg>
+              <span>Water</span>
+            </button>
+            <button class="element-button" data-element="3">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#463E3F"></circle>
+              </svg>
+              <span>Oil</span>
+            </button>
+            <button class="element-button" data-element="6">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#90EE90"></circle>
+              </svg>
+              <span>Acid</span>
+            </button>
+            <button class="element-button" data-element="7">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#FF7518"></circle>
+              </svg>
+              <span>Lava</span>
+            </button>
+            <button class="element-button" data-element="25">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#7FFF00"></circle>
+              </svg>
+              <span>Slime</span>
+            </button>
+          </div>
+          <div class="tab-content" data-category="energetic">
+            <!-- Energetic: Fire (4), Smoke (5), Steam (20), Plasma (15), Electricity (14) -->
+            <button class="element-button" data-element="4">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#FF6B4A"></circle>
+              </svg>
+              <span>Fire</span>
+            </button>
+            <button class="element-button" data-element="5">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#C4C4C4"></circle>
+              </svg>
+              <span>Smoke</span>
+            </button>
+            <button class="element-button" data-element="20">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#F5F5F5"></circle>
+              </svg>
+              <span>Steam</span>
+            </button>
+            <button class="element-button" data-element="15">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#FF69B4"></circle>
+              </svg>
+              <span>Plasma</span>
+            </button>
+            <button class="element-button" data-element="14">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#FFE87C"></circle>
+              </svg>
+              <span>Electricity</span>
+            </button>
+          </div>
+          <div class="tab-content" data-category="structures">
+            <!-- Structures: Metal (8), Stone (9), Wood (10), Ice (11), Plant (12), Bomb (16), Clay (21), Rubber (22), Glass Shard (23), Nitro (24), Carbon (26), Magnet (27), Virus (13) -->
+            <button class="element-button" data-element="8">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#D3D3D3"></circle>
+              </svg>
+              <span>Metal</span>
+            </button>
+            <button class="element-button" data-element="9">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#808080"></circle>
+              </svg>
+              <span>Stone</span>
+            </button>
+            <button class="element-button" data-element="10">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#966F33"></circle>
+              </svg>
+              <span>Wood</span>
+            </button>
+            <button class="element-button" data-element="11">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#E6F3FF"></circle>
+              </svg>
+              <span>Ice</span>
+            </button>
+            <button class="element-button" data-element="12">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#3CB371"></circle>
+              </svg>
+              <span>Plant</span>
+            </button>
+            <button class="element-button" data-element="16">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#8B0000"></circle>
+                <line x1="10" y1="2" x2="10" y2="8" stroke="black" stroke-width="1"/>
+              </svg>
+              <span>Bomb</span>
+            </button>
+            <button class="element-button" data-element="21">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#B66A50"></circle>
+              </svg>
+              <span>Clay</span>
+            </button>
+            <button class="element-button" data-element="22">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#1C1C1C"></circle>
+              </svg>
+              <span>Rubber</span>
+            </button>
+            <button class="element-button" data-element="23">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <polygon points="10,2 14,10 10,18 6,10" fill="#A0C8FF"></polygon>
+              </svg>
+              <span>Shard</span>
+            </button>
+            <button class="element-button" data-element="24">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#FFD700"></circle>
+              </svg>
+              <span>Nitro</span>
+            </button>
+            <button class="element-button" data-element="26">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#333333"></circle>
+              </svg>
+              <span>Carbon</span>
+            </button>
+            <button class="element-button" data-element="27">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <path d="M4,10 A6,6 0 0,1 16,10" fill="none" stroke="#4682B4" stroke-width="2"/>
+                <line x1="10" y1="4" x2="10" y2="16" stroke="#4682B4" stroke-width="2"/>
+              </svg>
+              <span>Magnet</span>
+            </button>
+            <button class="element-button" data-element="13">
+              <svg width="16" height="16" viewBox="0 0 20 20">
+                <circle cx="10" cy="10" r="8" fill="#8A2BE2"></circle>
+              </svg>
+              <span>Virus</span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="thickness-wrapper">
+        <div class="thickness-control">
+          <input type="range" id="thickness-slider" min="1" max="10" value="2">
+          <span class="thickness-label">Size</span>
+        </div>
+      </div>
+      <button id="reset-button">
+        <svg width="16" height="16" viewBox="0 0 20 20">
+          <polyline points="4,10 10,4 16,10" fill="none" stroke="#ddd" stroke-width="2"/>
+          <line x1="10" y1="4" x2="10" y2="16" stroke="#ddd" stroke-width="2"/>
+        </svg>
+        <span>Reset</span>
+      </button>
+    </div>
+    <!-- Simulation Canvas fills the window -->
+    <canvas id="canvas"></canvas>
+    <script type="module" src="main.js"></script>
+  </body>
+</html>
