@@ -1,0 +1,86 @@
+<html>
+<head>
+  <title>cat clicker</title>
+  <link rel="stylesheet" href="https://unpkg.com/7.css">
+  <link rel="stylesheet" href="styles.css">
+  <!-- Add CSP header to prevent XSS -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data:; media-src 'self'">
+</head>
+<body>
+  <div class="watermark">cat clicker by fouadd ❤️</div>
+
+  <div id="splash-screen">
+    <img src="logo.png" alt="cat clicker logo">
+    <!-- Escape HTML in static text -->
+    <div class="creator-credit">made by fouadd</div>
+    <div class="thanks-message">thanks for making this get on the hot page so fast ✨</div>
+    <div class="watermark splash-watermark">cat clicker by fouadd</div>
+    <div class="warning-text">please don&#39;t steal this project and change nothing ☹️</div>
+  </div>
+
+  <div id="main-game" style="display: none;">
+    <div id="settings-modal">
+      <h3>settings</h3>
+      <div class="settings-option">
+        <label for="music-select">music</label>
+        <select id="music-select">
+          <option value="" disabled selected>select a track</option>
+          <option value="music.mp3">music 1</option>
+          <option value="music2.mp3">music 2</option>
+        </select>
+      </div>
+      
+      <button id="close-settings">close</button>
+    </div>
+
+    <div id="shop-modal" style="display: none;">
+      <div class="shop-header">
+        <div>
+          <span class="shop-tab active" data-tab="locker">locker</span>
+          <span class="shop-tab" data-tab="shop">shop</span>
+          <span class="shop-tab" data-tab="battlepass">battle pass</span>
+        </div>
+        <div class="shop-cats-counter">cats: <span id="shop-cats-count">0</span></div>
+      </div>
+      <h3 id="shop-title">cat skins locker</h3>
+      <div id="skins-container"></div>
+      <button id="close-shop">return to game</button>
+      <div class="shop-footer">
+        shop refreshes every 24 hours • support-a-creator: fouadd
+      </div>
+    </div>
+
+    <div class="container">
+      <div id="score">cats: 0</div>
+      <div id="cps">per second: 0</div>
+      <div id="rebirth-info">rebirth level: 0</div>
+      <div id="boost-info" class="boost-info" style="display:none;"></div>
+      
+      <div class="game-area">
+        <div class="upgrades-container">
+          <div class="upgrade-title">upgrades</div>
+          <div id="upgradesList"></div>
+        </div>
+        
+        <div class="clicker-area">
+          <img id="cat" src="cat.webp" alt="clickable cat">
+          <div class="controls">
+            <button id="musicToggle">music on/off</button>
+            <button id="shopButton" class="shop-button">skin shop</button>
+            <button id="rebirthButton" class="rebirth-button">rebirth</button>
+            <div class="settings-option theme-toggle-standalone">
+              <span>theme:</span>
+              <label class="checkbox-wrapper">
+                <input type="checkbox" id="theme-toggle">
+                <span class="checkmark"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="game.js"></script>
+</body>
+</html>
