@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Windows 11</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #000;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .setup-container {
+            text-align: center;
+            max-width: 600px;
+        }
+        
+        .windows-logo {
+            width: 150px;
+            height: 150px;
+            margin-bottom: 30px;
+        }
+        
+        .setup-text {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        
+        .progress-container {
+            width: 300px;
+            margin: 0 auto;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: #0078D4;
+            border-radius: 2px;
+            transition: width 0.5s;
+        }
+        
+        .status-text {
+            margin-top: 20px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="setup-container">
+        <img src="Windows_logo_-_2012_(dark_blue).svg.png" alt="Windows 11 Logo" class="windows-logo">
+        <div class="setup-text">Hi there!</div>
+        <div class="setup-text">Welcome to Windows 11</div>
+        <div class="progress-container">
+            <div class="progress-bar">
+                <div class="progress" id="setup-progress"></div>
+            </div>
+        </div>
+        <div class="status-text" id="status-text">Setting up Windows 11...</div>
+    </div>
+    
+    <script>
+        // Simulate Windows 11 setup process
+        const progress = document.getElementById('setup-progress');
+        const statusText = document.getElementById('status-text');
+        let currentProgress = 0;
+        
+        const statusMessages = [
+            "Setting up Windows 11...",
+            "Getting things ready...",
+            "This might take a few minutes...",
+            "Almost there...",
+            "Just a few more moments..."
+        ];
+        
+        const interval = setInterval(() => {
+            currentProgress += 1;
+            progress.style.width = currentProgress + '%';
+            
+            if (currentProgress % 20 === 0) {
+                statusText.textContent = statusMessages[Math.floor(currentProgress / 20)];
+            }
+            
+            if (currentProgress >= 100) {
+                clearInterval(interval);
+                setTimeout(() => {
+                    // Here you would typically redirect to the Windows 11 desktop
+                    alert('Windows 11 setup complete! This is a demo, so we will stop here.');
+                }, 1000);
+            }
+        }, 100);
+    </script>
+</body>
+</html>
