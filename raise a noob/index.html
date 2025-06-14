@@ -1,0 +1,322 @@
+<html>
+<head>
+  <title>Dancing Noob Adventure</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Stats Display -->
+  <div id="statsDisplay">
+    <div id="robuxCounter">Robux: 0</div>
+    <div id="hungerCounter">Hunger: 100</div>
+    <div id="happinessCounter">Happiness: 100</div>
+  </div>
+  
+  <!-- Shop, Feeding, and Activities Icons -->
+  <div id="shopContainer">
+    <img id="shopIcon" src="epicfacespin.gif" alt="Upgrades">
+    <div id="shopText">Upgrades</div>
+  </div>
+
+  <div id="feedingContainer">
+    <img id="feedingIcon" src="316d4d6c-f320-4d86-af71-df92429319ee.png" alt="Feed">
+    <div id="feedingText">Feeding</div>
+  </div>
+  
+  <div id="activitiesContainer">
+    <img id="activitiesIcon" src="noob.png" alt="Activities">
+    <div id="activitiesText">Activities</div>
+  </div>
+  
+  <!-- Overlays -->
+  <div id="shopOverlay">
+    <div id="loadingText">Entering the shop!</div>
+    <div class="loading-circle"></div>
+  </div>
+
+  <div id="exitOverlay">
+    <div id="loadingText">Returning to home!</div>
+    <div class="loading-circle"></div>
+  </div>
+
+  <div id="feedingOverlay">
+    <div id="loadingText">Going to kitchen!</div>
+    <div class="loading-circle"></div>
+  </div>
+
+  <div id="feedingExitOverlay">
+    <div id="loadingText">Returning to home!</div>
+    <div class="loading-circle"></div>
+  </div>
+  
+  <div id="activitiesOverlay">
+    <div id="loadingText">Going to activities!</div>
+    <div class="loading-circle"></div>
+  </div>
+
+  <div id="activitiesExitOverlay">
+    <div id="loadingText">Returning to home!</div>
+    <div class="loading-circle"></div>
+  </div>
+  
+  <!-- Shop Screen -->
+  <div id="shopScreen">
+    <div id="shopExitContainer">
+      <img id="shopExitIcon" src="epicfacespin.gif" alt="Exit">
+      <div id="shopExitText">Exit</div>
+    </div>
+    <div id="clickUpgrade" class="shop-item">
+      <h3>+1 Robux Per Click</h3>
+      <p>Cost: 20 Robux</p>
+    </div>
+    <div id="autoClicker" class="shop-item">
+      <h3>Autoclicker | +1 Robux Per Second</h3>
+      <p>Cost: 55 Robux</p>
+    </div>
+    <div id="hotPotatoBoost" class="shop-item">
+      <h3>Hot Potato Boost | 1x Hot Potato Rewards</h3>
+      <p>Cost: 1 Hot Potato Win</p>
+    </div>
+    <div id="tvUpgrade" class="shop-item">
+      <h3>TV | +30 Happiness</h3>
+      <p>Cost: 300 Robux</p>
+      <p class="cooldown-text hidden">Cooldown: Ready!</p>
+    </div>
+    <div id="toyUpgrade" class="shop-item">
+      <h3>Toy | +15 Happiness</h3>
+      <p>Cost: 150 Robux</p>
+      <p class="cooldown-text hidden">Cooldown: Ready!</p>
+    </div>
+    <div id="roombaUpgrade" class="shop-item">
+      <h3>Roomba | Passive +1 Happiness/30s</h3>
+      <p>Cost: 500 Robux</p>
+    </div>
+  </div>
+
+  <!-- Feeding Screen -->
+  <div id="feedingScreen">
+    <div id="feedingExitContainer">
+      <img id="feedingExitIcon" src="epicfacespin.gif" alt="Exit">
+      <div id="feedingExitText">Exit</div>
+    </div>
+    <div id="feedingArea">
+      <img id="feedingNoob" src="Dancing_noob.webp" alt="Feeding Noob">
+      <img id="feedingTable" src="feeding-table1.png" alt="Table">
+      <img id="table-food" alt="Food on Table">
+      <img id="fridge" src="refrigerator_PNG9053.png" alt="Fridge">
+    </div>
+  </div>
+  
+  <!-- Activities Screen (Hot Potato Game) -->
+  <div id="activitiesScreen">
+    <div id="activitiesExitContainer">
+      <img id="activitiesExitIcon" src="epicfacespin.gif" alt="Exit">
+      <div id="activitiesExitText">Exit</div>
+    </div>
+    <div id="hotPotatoContainer">
+      <button id="hotPotatoButton">
+        <div class="potato-button-content">
+          <span class="potato-button-title">Hot Potato</span>
+          <img class="potato-button-icon" src="potato_PNG7080 (1).png" alt="Hot Potato">
+        </div>
+        <span class="potato-button-subtitle">Wins: 0</span>
+        <span class="potato-button-description">Pass the potato back and forth with the noob! Don't let it explode in your hands when time runs out!</span>
+      </button>
+    </div>
+    <!-- Hot Potato Game Container -->
+    <div id="hotPotatoGameContainer">
+      <div id="hotPotatoTimer">15</div>
+      <div id="hotPotatoScore">Player: 0 | Noob: 0</div>
+      <div id="turnStatus">Waiting to start...</div>
+      <div id="hotPotatoControls">
+        <button id="hotPotatoClose">Close</button>
+        <button id="hotPotatoInstructions">How to Play</button>
+      </div>
+      <div id="gameArea">
+        <div id="playerSide">
+          <button id="potatoButton">
+            <img src="potato_PNG7080 (1).png" alt="Hot Potato">
+          </button>
+        </div>
+        <div id="noobSide">
+          <img id="gameNoob" src="Dancing_noob.webp" alt="Game Noob">
+        </div>
+      </div>
+      <!-- Updated How to Play Modal -->
+      <div id="instructionsModal">
+        <h2>How to Play Hot Potato</h2>
+        <p>You need to click the potato to pass it.</p>
+        <p>The noob will pass you the hot potato within 0.1-1.0 seconds.</p>
+        <p>When you get the potato, you have 1 second to pass it back!</p>
+        <p>After 15 seconds, whoever has the potato loses.</p>
+        <p>If you fail to pass the potato within your 1-second time limit, you lose!</p>
+        <p>Win rounds to increase noob's happiness!</p>
+        <button id="closeInstructions">Got it!</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Fridge Screen -->
+  <div class="fridge-overlay"></div>
+  
+  <div id="fridgeScreen">
+    <button id="fridgeCloseBtn">Close</button>
+    <div id="fridgeHeader">
+      <div id="fridgeNav">
+        <button id="shopTabBtn" class="active">Shop</button>
+        <button id="inventoryTabBtn">Inventory</button>
+      </div>
+    </div>
+    
+    <div id="fridgeShopContent">
+      <div class="food-item" data-food="cookie" data-cost="80">
+        <img src="pngwing.com.png" alt="Cookie">
+        <h3>Chocolate Chip Cookie</h3>
+        <p>Hunger +20</p>
+        <p>Cost: 80 Robux</p>
+      </div>
+      <div class="food-item" data-food="yoylecake" data-cost="200">
+        <img src="Yoyle.webp" alt="Yoylecake">
+        <h3>Yoylecake</h3>
+        <p>Hunger +50</p>
+        <p>Cost: 200 Robux</p>
+      </div>
+    </div>
+    
+    <div id="fridgeInventoryContent" class="hidden">
+      <div id="inventorySlots"></div>
+    </div>
+    <div id="fridgeRobuxDisplay" class="shop-robux">Robux: 0</div>
+  </div>
+  
+  <!-- Audio Elements -->
+  <audio id="bgMusic" loop>
+    <source src="Wii Party Soundtrack - Main Menu Music.mp3" type="audio/mp3">
+  </audio>
+  
+  <audio id="shopMusic" loop>
+    <source src="Background Music.m4a" type="audio/mp4">
+  </audio>
+  
+  <audio id="clickSound">
+    <source src="mouse-click-290204.mp3" type="audio/mp3">
+  </audio>
+  
+  <audio id="explodeSound">
+    <source src="explode.mp3" type="audio/mp3">
+  </audio>
+  
+  <audio id="tadaSound">
+    <source src="tada.mp3" type="audio/mp3">
+  </audio>
+  
+  <audio id="errorSound">
+    <source src="Windows XP Error Sound.mp3" type="audio/mp3">
+  </audio>
+  
+  <audio id="activitiesMusic" loop>
+    <source src="Super Mario 64 Soundtrack - Dire, Dire Docks.mp3" type="audio/mp3">
+  </audio>
+  
+  <audio id="eatingSound">
+    <source src="roblox-eating-sound-effect-nom-nom-nom.mp3" type="audio/mp3">
+  </audio>
+  
+  <img id="noob" src="Dancing_noob.webp" alt="Dancing Noob">
+  
+  <img id="tvObject" alt="TV">
+  <div id="tvScreen">
+    <div id="tvStatic"></div>
+  </div>
+  <div class="tvBoostIndicator">TV: +3 Happiness</div>
+  
+  <div id="tvConfirmBox">
+    <p>Turn on the TV?</p>
+    <button id="turnOnTv">Yes</button>
+    <button id="cancelTv">No</button>
+  </div>
+
+  <div id="explosionContainer"></div>
+  
+  <div id="gameOverOverlay">
+    <h1>Your noob starved and you failed.</h1>
+    <button id="restartButton">Restart Game</button>
+  </div>
+
+  <!-- Settings -->
+  <div id="settingsContainer">
+    <svg id="settingsIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+    </svg>
+  </div>
+
+  <div class="settings-overlay"></div>
+  
+  <div id="settingsScreen">
+    <button id="settingsCloseBtn">Close</button>
+    <div id="settingsNav">
+      <button id="settingsTabBtn" class="active">Settings</button>
+      <button id="savesTabBtn">Saves</button>
+    </div>
+    
+    <div id="settingsContent">
+      <h2>Settings</h2>
+      <div class="setting-item">
+        <label class="toggle">
+          <span class="toggle-label">Music</span>
+          <input type="checkbox" id="musicToggle" checked>
+          <span class="toggle-slider"></span>
+        </label>
+        <label class="toggle">
+          <span class="toggle-label">Sound Effects</span>
+          <input type="checkbox" id="soundEffectsToggle" checked>
+          <span class="toggle-slider"></span>
+        </label>
+        <label class="toggle">
+          <span class="toggle-label">Performance Mode</span>
+          <input type="checkbox" id="performanceToggle">
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="setting-item">
+        <input type="text" id="codeInput" placeholder="Enter code">
+        <div class="code-error">Cannot use this code when happiness is below 35!</div>
+        <button id="redeemButton">Redeem</button>
+      </div>
+      <div class="setting-item">
+        <button id="testButton">Test Button</button>
+      </div>
+    </div>
+    
+    <div id="savesContent" class="hidden">
+      <h2>Save Manager</h2>
+      
+      <div class="save-slot auto-save-slot">
+        <div id="saveSlot0Info" class="save-slot-info">Auto-save: Empty</div>
+        <div class="save-slot-buttons">
+          <button id="loadAutoSave" class="load-btn">Load</button>
+        </div>
+      </div>
+      
+      <div class="save-slot">
+        <div id="saveSlot1Info" class="save-slot-info">Empty slot</div>
+        <div class="save-slot-buttons">
+          <button id="saveSlot1Save" class="save-btn">Save</button>
+          <button id="saveSlot1Load" class="load-btn">Load</button>
+          <button id="saveSlot1Reset" class="reset-btn">Reset</button>
+        </div>
+      </div>
+      
+      <div class="save-slot">
+        <div id="saveSlot2Info" class="save-slot-info">Empty slot</div>
+        <div class="save-slot-buttons">
+          <button id="saveSlot2Save" class="save-btn">Save</button>
+          <button id="saveSlot2Load" class="load-btn">Load</button>
+          <button id="saveSlot2Reset" class="reset-btn">Reset</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script src="script.js"></script>
+</body>
+</html>

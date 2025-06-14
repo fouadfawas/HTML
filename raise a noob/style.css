@@ -1,0 +1,1709 @@
+@font-face {
+  font-family: 'Shag Lounge';
+  src: url('Shag-Lounge.otf') format('opentype');
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background-image: url('Windows.webp');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+#noob {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: auto;
+  cursor: pointer;
+  transition: transform 0.3s ease-out;
+  will-change: left, top;
+}
+
+.noob-clicked {
+  animation: shake-and-grow 0.3s ease-out;
+}
+
+@keyframes shake-and-grow {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+  25% {
+    transform: translate(-52%, -50%) scale(1.1);
+  }
+  50% {
+    transform: translate(-48%, -50%) scale(1.15);
+  }
+  75% {
+    transform: translate(-51%, -50%) scale(1.1);
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.explosion {
+  position: absolute;
+  pointer-events: none;
+  width: 200px;
+  height: 200px;
+}
+
+#robuxDisplay {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 2001;
+}
+
+#robuxCounter {
+  position: static;
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 28px;
+  color: lightgreen;
+  text-shadow: 2px 2px 0 darkgreen;
+  transition: transform 0.5s ease-out, filter 0.5s ease-out;
+}
+
+.robux-added {
+  animation: robux-pop 0.5s ease-out;
+}
+
+@keyframes robux-pop {
+  0% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+  50% {
+    transform: scale(1.2);
+    filter: brightness(1.5);
+  }
+  100% {
+    transform: scale(1);
+    filter: brightness(1);
+  }
+}
+
+#shopContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+}
+
+#shopIcon {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#shopIcon:hover {
+  transform: scale(1.1);
+}
+
+#shopText {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 28px;
+  color: lightgreen;
+  text-shadow: 2px 2px 0 darkgreen;
+  margin-top: 5px;
+}
+
+#shopOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000033;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#loadingText {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 32px;
+  color: white;
+  text-shadow: 2px 2px 0 gray;
+  margin-bottom: 20px;
+}
+
+.loading-circle {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+#shopScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    repeating-conic-gradient(
+      from 0deg,
+      #004080 0% 25%,
+      #002d5c 25% 50%
+    );
+  background-size: 100px 100px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  animation: slideBackground 15s linear infinite;
+}
+
+@keyframes slideBackground {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 100px 100px;
+  }
+}
+
+#shopScreen::before,
+#shopScreen::after {
+  content: none;
+}
+
+@keyframes gradientShift {
+  0%, 100% {
+    background: 
+      repeating-conic-gradient(
+        from 0deg,
+        #11adf5 0% 25%,
+        #1165f5 25% 50%
+      );
+    background-size: 100px 100px;
+  }
+}
+
+.shop-item {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 10px;
+  width: 300px;
+  color: white;
+  font-family: 'Shag Lounge', sans-serif;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  animation: pulse 2s infinite;
+  z-index: 2;
+}
+
+.shop-item.purchased {
+  background: rgba(0, 255, 0, 0.1);
+  position: relative;
+}
+
+.shop-item.purchased::after {
+  content: 'PURCHASED';
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(0, 255, 0, 0.3);
+  color: white;
+  font-size: 12px;
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.shop-item.cooldown {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cooldown-text {
+  font-size: 16px;
+  color: #ff6b6b;
+  margin-top: 5px;
+}
+
+.shop-item::before {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  background: linear-gradient(
+    45deg,
+    transparent 0%,
+    rgba(17, 173, 245, 0.1) 45%,
+    rgba(17, 173, 245, 0.3) 50%,
+    rgba(17, 173, 245, 0.1) 55%,
+    transparent 100%
+  );
+  transition: all 0.5s ease;
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.shop-item:hover {
+  transform: scale(1.05);
+}
+
+#exitShop {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+#exitShop:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#exitOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000033;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#shopExitContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2002;
+}
+
+#shopExitIcon {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#shopExitIcon:hover {
+  transform: scale(1.1);
+}
+
+#shopExitText {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 28px;
+  color: lightgreen;
+  text-shadow: 2px 2px 0 darkgreen;
+  margin-top: 5px;
+}
+
+#statsDisplay {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 2001;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#statsDisplay.hidden {
+  display: none;
+}
+
+#hungerCounter {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 28px;
+  color: #ff6b6b;
+  text-shadow: 2px 2px 0 #8b0000;
+}
+
+#happinessCounter {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 28px;
+  color: yellow;
+  text-shadow: 2px 2px 0 #8b8b00;
+}
+
+#feedingContainer {
+  position: fixed;
+  top: 140px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+}
+
+#feedingIcon {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#feedingIcon:hover {
+  transform: scale(1.1);
+}
+
+#feedingText {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 28px;
+  color: lightgreen;
+  text-shadow: 2px 2px 0 darkgreen;
+  margin-top: 5px;
+}
+
+#feedingOverlay, #feedingExitOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000033;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#feedingScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    repeating-conic-gradient(
+      from 0deg,
+      #804000 0% 25%,
+      #b35900 25% 50%
+    );
+  background-size: 100px 100px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2000;
+  animation: slideBackground 15s linear infinite;
+}
+
+#feedingArea {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 40px;
+}
+
+#feedingNoob {
+  width: 300px;
+  height: auto;
+  position: absolute;
+  left: 150px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+#feedingTable {
+  width: 300px;
+  height: auto;
+  position: absolute;
+  left: 150px;
+  top: 65%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
+
+#fridge {
+  width: 400px;
+  height: auto;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+#feedingExitContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2002;
+}
+
+#feedingExitIcon {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#feedingExitIcon:hover {
+  transform: scale(1.1);
+}
+
+#feedingExitText {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 28px;
+  color: lightgreen;
+  text-shadow: 2px 2px 0 darkgreen;
+  margin-top: 5px;
+}
+
+#fridgeScreen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  height: 80%;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 15px;
+  padding: 20px;
+  z-index: 2500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+}
+
+#fridgeScreen.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#fridgeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#fridgeNav {
+  display: flex;
+  gap: 10px;
+}
+
+#fridgeNav button {
+  font-family: 'Shag Lounge', sans-serif;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#fridgeNav button.active {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.food-item {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 10px 0;
+  color: white;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.food-item img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.food-item:hover {
+  transform: scale(1.02);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+#inventorySlots {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  padding: 10px;
+}
+
+.inventory-slot {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 15px;
+  min-height: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.inventory-slot:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.inventory-slot p {
+  color: white;
+  font-family: 'Shag Lounge', sans-serif;
+}
+
+.inventory-slot img {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.shop-robux {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 24px;
+  color: lightgreen;
+  text-shadow: 2px 2px 0 darkgreen;
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  background: rgba(255, 255, 255, 0.15);
+  padding: 10px 20px;
+  border-radius: 10px;
+  display: none;
+}
+
+#fridgeRobuxDisplay {
+  display: block !important;
+}
+
+.fridge-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2499;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.fridge-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#fridgeCloseBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-family: 'Shag Lounge', sans-serif;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#fridgeCloseBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+#table-food {
+  position: absolute;
+  left: 150px;
+  top: 55%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  display: none;
+  z-index: 10;
+}
+
+#gameOverOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: background 1s ease, opacity 1s ease;
+  z-index: 4000;
+}
+
+#gameOverOverlay.visible {
+  background: rgba(0, 0, 0, 1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#gameOverOverlay h1 {
+  font-family: 'Shag Lounge', sans-serif;
+  color: white;
+  font-size: 48px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+#restartButton {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 24px;
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 15px 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeIn 1s 2s forwards;
+}
+
+#restartButton:hover {
+  background: #45a049;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+#hotPotatoContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#hotPotatoButton {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 32px;
+  padding: 30px 40px;
+  width: 400px;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 15px;
+  color: #000;
+  cursor: pointer;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+#hotPotatoButton:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+#hotPotatoButton:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.potato-button-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.potato-button-title {
+  font-size: 32px;
+  margin: 0;
+}
+
+.potato-button-icon {
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+
+.potato-button-subtitle {
+  font-size: 14px;
+  color: #ffcc00;
+  margin-top: 5px;
+  font-weight: bold;
+  text-shadow: 1px 1px 0 #000;
+}
+
+.potato-button-description {
+  font-size: 18px;
+  color: #666;
+  margin-top: 10px;
+  line-height: 1.3;
+  max-width: 300px;
+}
+
+#hotPotatoGameContainer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('bfdi background.webp');
+  background-size: cover;
+  background-position: center;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  z-index: 3500;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+#hotPotatoGameContainer.visible {
+  opacity: 1;
+}
+
+#hotPotatoTimer {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 48px;
+  color: #ff6b6b;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  margin-top: 20px;
+}
+
+#hotPotatoControls {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  gap: 20px;
+}
+
+#hotPotatoClose, #hotPotatoInstructions {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 24px;
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#hotPotatoClose:hover, #hotPotatoInstructions:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+#instructionsModal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.9);
+  padding: 30px;
+  border-radius: 15px;
+  z-index: 3600;
+  color: white;
+  font-family: 'Shag Lounge', sans-serif;
+  max-width: 500px;
+  text-align: center;
+}
+
+#instructionsModal h2 {
+  color: #ff6b6b;
+  margin-bottom: 20px;
+}
+
+#instructionsModal p {
+  margin: 10px 0;
+  line-height: 1.5;
+}
+
+#closeInstructions {
+  margin-top: 20px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  font-family: 'Shag Lounge', sans-serif;
+  transition: background 0.3s ease;
+}
+
+#closeInstructions:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+#gameArea {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 80%;
+  margin: 0 auto;
+  padding-bottom: 100px;
+}
+
+#playerSide, #noobSide {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+}
+
+#potatoButton {
+  width: 100px;
+  height: 100px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none;
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+}
+
+#potatoButton img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.5));
+  animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    filter: drop-shadow(0 0 10px rgba(255, 165, 0, 0.5));
+  }
+  to {
+    filter: drop-shadow(0 0 20px rgba(255, 165, 0, 0.8));
+  }
+}
+
+#gameNoob {
+  width: 200px;
+  height: auto;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+#potatoButton.active {
+  display: block;
+}
+
+#potatoButton:disabled {
+  background: #666;
+  animation: none;
+  cursor: not-allowed;
+}
+
+#activitiesContainer {
+  position: fixed;
+  top: 260px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1000;
+}
+
+#activitiesIcon {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#activitiesIcon:hover {
+  transform: scale(1.1);
+}
+
+#activitiesText {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 28px;
+  color: lightgreen;
+  text-shadow: 2px 2px 0 darkgreen;
+  margin-top: 5px;
+}
+
+#activitiesOverlay, #activitiesExitOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000033;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#activitiesScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('1eprhbtmvoo51.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2000;
+}
+
+#activitiesExitContainer {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 2002;
+}
+
+#activitiesExitIcon {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+#activitiesExitIcon:hover {
+  transform: scale(1.1);
+}
+
+#activitiesExitText {
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 28px;
+  color: lightgreen;
+  text-shadow: 2px 2px 0 darkgreen;
+  margin-top: 5px;
+}
+
+#settingsContainer {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  z-index: 1000;
+}
+
+#settingsIcon {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  filter: invert(1);
+}
+
+.settings-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 2499;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.settings-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#settingsScreen {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 15px;
+  padding: 20px;
+  z-index: 2500;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease-out;
+  color: white;
+  font-family: 'Shag Lounge', sans-serif;
+}
+
+#settingsScreen.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+#settingsCloseBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  font-family: 'Shag Lounge', sans-serif;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+#settingsCloseBtn:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+#settingsTabBtn, #savesTabBtn {
+  font-family: 'Shag Lounge', sans-serif;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px 5px 0 0;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  border-bottom: 2px solid transparent;
+}
+
+#settingsTabBtn.active, #savesTabBtn.active {
+  background: rgba(255, 255, 255, 0.2);
+  border-bottom: 2px solid #2196F3;
+}
+
+#settingsNav {
+  display: flex;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+#savesContent {
+  max-height: 300px;
+  overflow-y: auto;
+  padding-right: 10px;
+}
+
+.save-slot {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  padding: 15px;
+  margin: 10px 0;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.save-slot-info {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #ddd;
+}
+
+.save-slot-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.save-slot-buttons button {
+  flex: 1;
+  font-family: 'Shag Lounge', sans-serif;
+  padding: 8px;
+  border: none;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.save-slot-buttons button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.save-slot-buttons button.save-btn {
+  background: rgba(76, 175, 80, 0.6);
+}
+
+.save-slot-buttons button.load-btn {
+  background: rgba(33, 150, 243, 0.6);
+}
+
+.save-slot-buttons button.reset-btn {
+  background: rgba(244, 67, 54, 0.6);
+}
+
+.save-slot-buttons button.save-btn:hover {
+  background: rgba(76, 175, 80, 0.8);
+}
+
+.save-slot-buttons button.load-btn:hover {
+  background: rgba(33, 150, 243, 0.8);
+}
+
+.save-slot-buttons button.reset-btn:hover {
+  background: rgba(244, 67, 54, 0.8);
+}
+
+.auto-save-slot {
+  border-left: 4px solid #ff9800;
+}
+
+.save-notification, .load-notification, .error-notification {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 18px;
+  z-index: 3900;
+  text-align: center;
+  animation: notification-slide 2s forwards;
+}
+
+.save-notification {
+  background-color: rgba(76, 175, 80, 0.9);
+  color: white;
+}
+
+.load-notification {
+  background-color: rgba(33, 150, 243, 0.9);
+  color: white;
+}
+
+.error-notification {
+  position: fixed;
+  padding: 15px 30px;
+  border-radius: 10px;
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 18px;
+  z-index: 3900;
+  text-align: center;
+  background-color: rgba(244, 67, 54, 0.9);
+  color: white;
+  pointer-events: none;
+}
+
+@keyframes notification-slide {
+  0% { opacity: 0; top: 0; }
+  100% { opacity: 0; top: -60px; }
+}
+
+.setting-item {
+  margin: 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.setting-item input[type="text"] {
+  font-family: 'Shag Lounge', sans-serif;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #666;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.setting-item button {
+  font-family: 'Shag Lounge', sans-serif;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+.setting-item button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.code-error {
+  color: #ff6b6b;
+  font-size: 14px;
+  margin-top: 5px;
+  display: none;
+}
+
+.code-error.visible {
+  display: block;
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.toggle-label {
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.toggle input {
+  display: none;
+}
+
+.toggle-slider {
+  position: relative;
+  width: 60px;
+  height: 30px;
+  background: #ccc;
+  border-radius: 15px;
+  transition: background 0.3s ease;
+}
+
+.toggle-slider:before {
+  content: '';
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  width: 20px;
+  height: 20px;
+  background: white;
+  border-radius: 50%;
+  transition: transform 0.3s ease;
+}
+
+.toggle input:checked + .toggle-slider {
+  background: #2196F3;
+}
+
+.toggle input:checked + .toggle-slider:before {
+  transform: translateX(30px);
+}
+
+#shopOverlay, #exitOverlay, #feedingOverlay, #feedingExitOverlay, #activitiesOverlay, #activitiesExitOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000033;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#shopScreen, #feedingScreen, #activitiesScreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2000;
+}
+
+#fridgeInventoryContent {
+  max-height: calc(100% - 60px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+#hotPotatoScore {
+  font-family: 'Shag Lounge', sans-serif;
+  color: white;
+  font-size: 24px;
+  margin-top: 20px;
+}
+
+#turnStatus {
+  font-family: 'Shag Lounge', sans-serif;
+  color: white;
+  font-size: 24px;
+  margin-top: 10px;
+}
+
+@keyframes sadWobble {
+  0% { transform: translateY(-50%) rotate(-5deg); }
+  50% { transform: translateY(-50%) rotate(5deg); }
+  100% { transform: translateY(-50%) rotate(-5deg); }
+}
+
+.sad-noob {
+  animation: sadWobble 3s ease-in-out infinite;
+  transform-origin: bottom center;
+  filter: brightness(1.2);
+  scale: 0.8;
+  margin-top: -50px;
+}
+
+.sick-noob {
+  animation: sickWobble 1.5s ease-in-out infinite;
+  transform-origin: bottom center;
+  filter: hue-rotate(90deg) saturate(1.2) brightness(0.9);
+  scale: 0.8;
+  margin-top: -50px;
+}
+
+@keyframes sickWobble {
+  0% { transform: translateY(-70%) rotate(-3deg) scale(0.8); }
+  25% { transform: translateY(-68%) rotate(0deg) scale(0.8); }
+  50% { transform: translateY(-70%) rotate(3deg) scale(0.8); }
+  75% { transform: translateY(-72%) rotate(0deg) scale(0.8); }
+  100% { transform: translateY(-70%) rotate(-3deg) scale(0.8); }
+}
+
+/* Specific overrides for the feeding noob */
+#feedingNoob.sad-noob {
+  animation: feedingSadWobble 3s ease-in-out infinite;
+}
+
+#feedingNoob.sick-noob {
+  animation: feedingSickWobble 1.5s ease-in-out infinite;
+}
+
+@keyframes feedingSickWobble {
+  0% { transform: translateY(-70%) rotate(-3deg) scale(0.8); }
+  25% { transform: translateY(-68%) rotate(0deg) scale(0.8); }
+  50% { transform: translateY(-70%) rotate(3deg) scale(0.8); }
+  75% { transform: translateY(-72%) rotate(0deg) scale(0.8); }
+  100% { transform: translateY(-70%) rotate(-3deg) scale(0.8); }
+}
+
+/* Specific overrides for the game noob */
+#gameNoob.sad-noob {
+  animation: gameSadWobble 3s ease-in-out infinite;
+}
+
+@keyframes gameSadWobble {
+  0% { transform: translateY(-20%) rotate(-5deg) scale(0.8); }
+  50% { transform: translateY(-20%) rotate(5deg) scale(0.8); }
+  100% { transform: translateY(-20%) rotate(-5deg) scale(0.8); }
+}
+
+/* Specific overrides for the main noob */
+#noob.sad-noob {
+  animation: mainSadWobble 3s ease-in-out infinite;
+}
+
+@keyframes mainSadWobble {
+  0% { transform: translate(-50%, -70%) rotate(-5deg) scale(0.8); }
+  50% { transform: translate(-50%, -70%) rotate(5deg) scale(0.8); }
+  100% { transform: translate(-50%, -70%) rotate(-5deg) scale(0.8); }
+}
+
+.big-floating-robux {
+  position: fixed;
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 48px;
+  color: gold;
+  text-shadow: 3px 3px 0 #b8860b;
+  pointer-events: none;
+  z-index: 3700;
+  transform: translate(-50%, -50%);
+  animation: big-float 2s forwards;
+  text-align: center;
+  white-space: nowrap;
+}
+
+@keyframes big-float {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+  20% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+  80% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+.floating-robux {
+  position: fixed;
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 24px;
+  color: #00ff00;
+  text-shadow: 2px 2px 0 #006600;
+  pointer-events: none;
+  z-index: 1500;
+  animation: float-away 1s forwards;
+}
+
+@keyframes float-away {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--x), var(--y)) scale(1.2);
+  }
+}
+
+.sick-notification, .recovery-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 20px 40px;
+  border-radius: 15px;
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 28px;
+  z-index: 3800;
+  text-align: center;
+  animation: notification-fade 3s forwards;
+}
+
+.sick-notification {
+  background-color: rgba(100, 255, 100, 0.9);
+  color: #006600;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+.recovery-notification {
+  background-color: rgba(100, 255, 100, 0.9);
+  color: white;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+}
+
+@keyframes notification-fade {
+  0% { opacity: 0; transform: translate(-50%, -70%); }
+  20% { opacity: 1; transform: translate(-50%, -50%); }
+  80% { opacity: 1; transform: translate(-50%, -50%); }
+  100% { opacity: 0; transform: translate(-50%, -30%); }
+}
+
+.particle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 1;
+  z-index: 1200;
+  transform: translate(0, 0);
+  animation: particle-move 1s forwards ease-out;
+}
+
+@keyframes particle-move {
+  to {
+    transform: translate(var(--x), var(--y));
+    opacity: 0;
+  }
+}
+
+.happiness-boost {
+  position: fixed;
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 28px;
+  color: yellow;
+  text-shadow: 2px 2px 0 #8b8b00;
+  pointer-events: none;
+  z-index: 1500;
+  animation: happiness-float 1.5s forwards;
+}
+
+@keyframes happiness-float {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(0, -80px) scale(1.2);
+  }
+}
+
+#tvObject {
+  position: absolute;
+  width: 150px;
+  height: 120px;
+  bottom: 20px;
+  left: 20px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+  display: none;
+  z-index: 500;
+}
+
+#tvObject:hover {
+  transform: scale(1.05);
+}
+
+#tvScreen {
+  position: absolute;
+  width: 120px;
+  height: 90px;
+  top: 10px;
+  left: 15px;
+  background: #000;
+  overflow: hidden;
+  display: none;
+}
+
+#tvStatic {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    rgba(0, 0, 255, 0.1),
+    rgba(255, 255, 255, 0.3)
+  );
+  animation: tvStatic 0.5s infinite;
+}
+
+@keyframes tvStatic {
+  0% { background-position: 0% 0%; }
+  20% { background-position: 50% 50%; }
+  40% { background-position: 30% 10%; }
+  60% { background-position: 70% 90%; }
+  80% { background-position: 10% 30%; }
+  100% { background-position: 50% 50%; }
+}
+
+#tvConfirmBox {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(0, 0, 0, 0.9);
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  color: white;
+  font-family: 'Shag Lounge', sans-serif;
+  z-index: 3500;
+  display: none;
+}
+
+#tvConfirmBox button {
+  margin: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Shag Lounge', sans-serif;
+}
+
+.tvBoostIndicator {
+  position: absolute;
+  bottom: 20px;
+  left: 180px;
+  background: rgba(0, 0, 0, 0.6);
+  color: #4CAF50;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-family: 'Shag Lounge', sans-serif;
+  font-size: 14px;
+  z-index: 500;
+  display: none;
+}
+
+#testButton {
+  font-family: 'Shag Lounge', sans-serif;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background: rgba(255, 0, 255, 0.3);
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+}
+
+#testButton:hover {
+  background: rgba(255, 0, 255, 0.5);
+}
