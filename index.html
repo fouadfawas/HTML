@@ -1,0 +1,830 @@
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>windows 95 hub deluxe crt edition</title>
+<style>
+  @font-face {
+    font-family: 'PixelFont';
+    src: local('Courier New'), monospace;
+  }
+  body {
+    margin: 0;
+    height: 100vh;
+    background:
+      radial-gradient(circle at center, #011400 60%, #000a00 100%),
+      repeating-linear-gradient(0deg, transparent 0 2px, rgba(0,255,0,0.04) 2px 4px),
+      repeating-linear-gradient(90deg, transparent 0 2px, rgba(0,255,0,0.04) 2px 4px);
+    background-size: 100% 100%, 100% 4px, 4px 100%;
+    font-family: 'Tahoma', 'PixelFont', monospace, sans-serif;
+    user-select: none;
+    overflow: hidden;
+  }
+  /* flicker animation */
+  @keyframes flicker {
+    0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+      opacity: 0.95;
+    }
+    20%, 22%, 24%, 55% {
+      opacity: 0.85;
+    }
+  }
+  .window {
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 920px;
+    max-width: 98vw;
+    min-width: 400px;
+    background: #0a1908;
+    border: 2px solid #0a4c00;
+    box-shadow:
+      inset -1px -1px 6px #1a5025,
+      inset 1px 1px 2px #003300;
+    color: #a2d18f;
+    display: flex;
+    flex-direction: column;
+    resize: both;
+    overflow: hidden;
+    font-size: 13px;
+    animation: flicker 3s infinite alternate;
+    filter: drop-shadow(0 0 3px #3cff00);
+    height: 650px;
+    min-height: 650px;
+  }
+  .title-bar {
+    background: linear-gradient(to right, #003300, #005000);
+    color: #a2d18f;
+    font-weight: bold;
+    padding: 5px 10px;
+    cursor: grab;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-shadow: 0 0 3px #00ff00;
+  }
+  .title-bar:active {
+    cursor: grabbing;
+  }
+  .title-bar-text {
+    user-select: none;
+  }
+  .title-bar-buttons {
+    display: flex;
+    gap: 4px;
+  }
+  .title-button {
+    width: 18px;
+    height: 18px;
+    background: #0a1908;
+    border: 2px outset #0a4c00;
+    font-weight: bold;
+    color: #a2d18f;
+    text-align: center;
+    line-height: 14px;
+    user-select: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: inset 1px 1px 0 #1a5025;
+    transition: background-color 0.2s, color 0.2s;
+    text-shadow: 0 0 2px #00ff00;
+  }
+  .title-button:hover {
+    background-color: #003300;
+    color: #7dfc00;
+    box-shadow: none;
+  }
+  .content {
+    background: #0a1908;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+    overflow-y: auto;
+    max-height: 360px;
+    min-height: 360px;
+    border-top: 2px solid #1a5025;
+    border-bottom: 2px solid #1a5025;
+    box-shadow: inset 0 0 10px #00ff00aa;
+    font-size: 13px;
+    color: #a2d18f;
+    text-shadow: 0 0 2px #00ff00;
+  }
+  .hub-button {
+    background: #0a1908;
+    border: 2px solid #1a5025;
+    border-top-color: #004000;
+    border-left-color: #004000;
+    padding: 12px 8px;
+    text-align: center;
+    font-size: 12px;
+    color: #a2d18f;
+    text-decoration: none;
+    box-shadow: inset 1px 1px 0 #003300, inset -1px -1px 0 #003300;
+    user-select: none;
+    transition: background-color 0.15s, color 0.15s, box-shadow 0.15s;
+    text-shadow: 0 0 3px #00ff00;
+  }
+  .hub-button:hover {
+    background-color: #003300;
+    color: #7dfc00;
+    border-color: #00ff00;
+    box-shadow: none;
+  }
+  .hub-button:active {
+    border: 2px solid #004400;
+    border-top-color: #007700;
+    border-left-color: #007700;
+    box-shadow: inset -1px -1px 0 #00ff00, inset 1px 1px 0 #004400;
+    background-color: #001a00;
+  }
+  .status-bar {
+    height: 22px;
+    background: #011400;
+    border-top: 2px solid #004400;
+    border-bottom: 2px solid #004400;
+    padding: 3px 10px;
+    font-size: 12px;
+    color: #a2d18f;
+    font-style: italic;
+    user-select: none;
+    text-shadow: 0 0 2px #00ff00;
+    display: flex;
+    justify-content: space-between;
+  }
+  .file-list {
+    display: flex;
+    flex-direction: column;
+    background: #0a1908;
+    border-top: 2px solid #1a5025;
+    overflow-y: auto;
+    max-height: 90px;
+    min-height: 90px;
+    padding: 3px 0;
+    font-size: 11px;
+  }
+  .file-item {
+    padding: 4px 8px;
+    border-bottom: 1px solid #004400;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background-color 0.15s;
+  }
+  .file-item:hover {
+    background: #300;
+  }
+  .file-item:active {
+    border: 2px solid #004400;
+    border-color: #007700;
+    color: #00770;
+    box-shadow: inset -1px -1px 0 #00ff00, inset 1px 1px 0 #004400;
+    background-color: #001a00;
+  }
+  .file-download-btn {
+    background: #0a1908;
+    border: 1px solid #1a5025;
+    color: #a2d18f;
+    padding: 1px 4px;
+    font-size: 10px;
+    margin-left: auto;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .file-download-btn:hover {
+    background: #003300;
+    border-color: #00ff00;
+    color: #7dfc00;
+  }
+  /* custom scrollbar for crt vibe */
+  .content::-webkit-scrollbar {
+    width: 14px;
+    background-color: #011400;
+  }
+  .content::-webkit-scrollbar-thumb {
+    background: #004400;
+    border: 2px solid #001a00;
+  }
+  .content::-webkit-scrollbar-thumb:hover {
+    background: #007700;
+  }
+  /* scanline overlay */
+  body::before {
+    content: "";
+    position: fixed;
+    pointer-events: none;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      rgba(0,255,0,0.06) 0,
+      rgba(0,255,0,0.06) 1px,
+      transparent 1px,
+      transparent 2px
+    );
+    mix-blend-mode: screen;
+    z-index: 99999;
+  }
+  /* Desktop icon styles */
+  .icon-iconImage {
+    width: 96px;
+    height: 96px;
+    display: block;
+    margin: 0 auto 5px;
+  }
+  .desktop-icon {
+    position: fixed;
+    width: 120px;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    padding: 10px;
+    text-align: center;
+    margin: 10px;
+    cursor: pointer;
+    color: #aa2d18f;
+    text-shadow: 0 0 3px #00ff00;
+    user-select: none;
+  }
+  .icon-text {
+    background: transparent;
+    font-size: 14px;
+    font-family: Tahoma, sans-serif;
+    word-wrap: break-word;
+    padding: 3px;
+    border: 1px solid transparent;
+    text-align: center;
+    margin-top: 5px;
+    color: #a2d18f;
+    text-shadow: 0 0 3px #00ff00;
+  }
+  .desktop-icon:hover {
+    background: #003300;
+    border: 1px solid #00ff00;
+  }
+
+  .taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: linear-gradient(to right, #003300, #005000);
+    border-top: 2px solid #0a4c00;
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
+    z-index: 9999;
+    box-shadow: 0 -2px 5px #00ff00aa;
+  }
+  .start-button {
+    background: #0a1908;
+    border: 2px outset #1a5025;
+    color: #a2d18f;
+    padding: 5px 15px;
+    font-weight: bold;
+    font-size: 13px;
+  }
+  .start-button:active {
+    border-style: inset;
+    background: #001a00;
+  }
+  .start-menu {
+    position: fixed;
+    bottom: 50px;
+    left: 5px;
+    width: 200px;
+    background: #0a1908;
+    border: 2px solid #0a4c00;
+    z-index: 10000;
+    display: none;
+    box-shadow: 0 5px 3px #00ff0055;
+    color: #a2d18f;
+  }
+  .start-menu-item {
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: #a2d1a2d18f;
+    position: relative;
+  }
+  .start-menu-item:hover {
+    background: #004000;
+    color: #7dfc00;
+  }
+  .start-submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    bottom: 25px;
+    background: #0a1908;
+    border: 1px solid #0a4c00;
+    min-width: 200px;
+  }
+
+  .view-selector {
+    display: flex;
+    gap: 8px;
+    padding: 10px;
+    background: #011400;
+    border-top: 1px solid #004400;
+    margin-top: auto;
+  }
+  .view-option {
+    background: #0a1908;
+    border: 1px solid #1a5025;
+    color: #a2d18f;
+    padding: 4px 8px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .view-option:hover {
+    background: #003300;
+    border-color: #00ff00;
+  }
+  .view-option-active {
+    background: #004400;
+    border-color: #00ff00;
+    color: #7dfc00;
+  }
+  /* Add new styles for video */
+  .video-player {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 640px;
+    max-width: 90vw;
+    background: #0a1908;
+    border: 2px solid #0a4c00;
+    padding: 8px;
+  }
+  .video-player video {
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+</style>
+</head>
+<body>
+<div class="desktop-icon" onclick="showWindow()">
+  <img src="index assets/Untitled6_20250516182928.png" class="icon-iconImage">
+  <div class="icon-text">My Computer</div>
+</div>
+<div class="window" id="window">
+  <div class="title-bar" id="titleBar">
+    <div class="title-bar-text">html files</div>
+    <div class="title-bar-buttons">
+      <div class="title-button" id="minimizeBtn">_</div>
+      <div class="title-button" id="maximizeBtn">□</div>
+      <div class="title-button" id="closeBtn">X</div>
+    </div>
+  </div>
+  <div class="content" id="content">
+    <a href="cube of life/index.html" class="hub-button" tabindex="1">cube of life</a>
+    <a href="driving sim/index.html" class="hub-button" tabindex="2">driving sim</a>
+    <a href="undertoilet/index.html" class="hub-button" tabindex="3">undertoilet</a>
+    <a href="noobs pizza/index.html" class="hub-button" tabindex="4">noobs pizza</a>
+    <a href="pendulum/index.html" class="hub-button" tabindex="5">pendulum</a>
+    <a href="bonjour.html" class="hub-button" tabindex="6">bonjour</a>
+    <a href="rickroll.html" class="hub-button" tabindex="7">rickroll</a>
+    <a href="ps3 html project/index.html" class="hub-button" tabindex="8">PS3 emulator</a>
+    <a href="social credit clicker/index.html" class="hub-button" tabindex="9">chinese clicker game</a>
+    <a href="potato chip/index.html" class="hub-button" tabindex="10">potato chip</a>
+    <a href="cat clicker/index.html" class="hub-button" tabindex="11">cat clicker</a>
+    <a href="win xp/index.html" class="hub-button" tabindex="12">windows xp</a>
+    <a href="china/china.html" class="hub-button" tabindex="13">china</a>
+    <a href="free robux/index.html" class="hub-button" tabindex="14">free robux</a>
+    <a href="raise a noob/index.html" tabindex="15" class="hub-button">raise a noob</a>
+    <a href="windows/index.html" tabindex="16" class="hub-button">windows</a>
+<a href="retro flight sim/index.html" tabindex="17" class="hub-button">retro flight sim</a>
+<a href="french class.html" tabindex="18" class="hub-button">french class</a>
+<a href="flame/index.html" tabindex="19" class="hub-button">retro fireplace</a>
+<a href="particle sim/index.html" tabindex="20" class="hub-button">particle sim</a>
+<a href="index assets/404.html" tabindex="21" class="hub-button">page 21</a>
+<a href="index assets/404.html" tabindex="22" class="hub-button">page 22</a>
+<a href="index assets/404.html" tabindex="23" class="hub-button">page 23</a>
+<a href="index assets/404.html" tabindex="24" class="hub-button">page 24</a>
+<a href="index assets/404.html" tabindex="25" class="hub-button">page 25</a>
+<a href="index assets/404.html" tabindex="26" class="hub-button">page 26</a>
+<a href="index assets/404.html" tabindex="27" class="hub-button">page 27</a>
+<a href="index assets/404.html" tabindex="28" class="hub-button">page 28</a>
+<a href="index assets/404.html" tabindex="29" class="hub-button">page 29</a>
+<a href="index assets/404.html" tabindex="30" class="hub-button">page 3030</a>
+<a href="index assets/404.html" class="hub-button" tabindex="31">page 31</a>
+<a href="index assets/404.html" class="hub-button" tabindex="32">page 32</a>
+<a href="index assets/404.html" class="hub-button" tabindex="33">page 33</a>
+<a href="index assets/404.html" class="hub-button" tabindex="34">page 34</a>
+<a href="index assets/404.html" class="hub-button" tabindex="35">page 35</a>
+<a href="index assets/404.html" class="hub-button" tabindex="36">page 36</a>
+<a href="index assets/404.html" class="hub-button" tabindex="37">page 37</a>
+<a href="index assets/404.html" class="hub-button" tabindex="38">page 38</a>
+<a href="index assets/404.html" class="hub-button" tabindex="39">page 39</a>
+<a href="index assets/404.html" class="hub-button" tabindex="40">page 40</a>
+<a href="index assets/404.html" class="hub-button" tabindex="41">page 41</a>
+<a href="index assets/404.html" class="hub-button" tabindex="42">page 42</a>
+<a href="index assets/404.html" class="hub-button" tabindex="43">page 43</a>
+<a href="index assets/404.html" class="hub-button" tabindex="44">page 44</a>
+<a href="index assets/404.html" class="hub-button" tabindex="45">page 45</a>
+<a href="index assets/404.html" class="hub-button" tabindex="46">page 46</a>
+<a href="index assets/404.html" class="hub-button" tabindex="47">page 47</a>
+<a href="index assets/404.html" class="hub-button" tabindex="48">page 48</a>
+<a href="index assets/404.html" class="hub-button" tabindex="49">page 49</a>
+<a href="index assets/404.html" class="hub-button" tabindex="50">page 50</a>
+<a href="index assets/404.html" class="hub-button" tabindex="51">page 51</a>
+<a href="index assets/404.html" class="hub-button" tabindex="52">page 52</a>
+<a href="index assets/404.html" class="hub-button" tabindex="53">page 53</a>
+<a href="index assets/404.html" class="hub-button" tabindex="54">page 54</a>
+<a href="index assets/404.html" class="hub-button" tabindex="55">page 55</a>
+<a href="index assets/404.html" class="hub-button" tabindex="56">page 56</a>
+<a href="index assets/404.html" class="hub-button" tabindex="57">page 57</a>
+<a href="index assets/404.html" class="hub-button" tabindex="58">page 58</a>
+<a href="index assets/404.html" class="hub-button" tabindex="59">page 59</a>
+<a href="index assets/404.html" class="hub-button" tabindex="60">page 60</a>
+<a href="index assets/404.html" class="hub-button" tabindex="61">page 61</a>
+<a href="index assets/404.html" class="hub-button" tabindex="62">page 62</a>
+<a href="index assets/404.html" class="hub-button" tabindex="63">page 63</a>
+<a href="index assets/404.html" class="hub-button" tabindex="64">page 64</a>
+<a href="index assets/404.html" class="hub-button" tabindex="65">page 65</a>
+<a href="index assets/404.html" class="hub-button" tabindex="66">page 66</a>
+<a href="index assets/404.html" class="hub-button" tabindex="67">page 67</a>
+<a href="index assets/404.html" class="hub-button" tabindex="68">page 68</a>
+<a href="index assets/404.html" class="hub-button" tabindex="69">page 69</a>
+<a href="index assets/404.html" class="hub-button" tabindex="70">page 70</a>
+<a href="index assets/404.html" class="hub-button" tabindex="71">page 71</a>
+<a href="index assets/404.html" class="hub-button" tabindex="72">page 72</a>
+<a href="index assets/404.html" class="hub-button" tabindex="73">page 73</a>
+<a href="index assets/404.html" class="hub-button" tabindex="74">page 74</a>
+<a href="index assets/404.html" class="hub-button" tabindex="75">page 75</a>
+<a href="index assets/404.html" class="hub-button" tabindex="76">page 76</a>
+<a href="index assets/404.html" class="hub-button" tabindex="77">page 77</a>
+<a href="index assets/404.html" class="hub-button" tabindex="78">page 78</a>
+<a href="index assets/404.html" class="hub-button" tabindex="79">page 79</a>
+<a href="index assets/404.html" class="hub-button" tabindex="80">page 80</a>
+  </div>
+  <div class="status-bar" id="statusBar">
+    <span id="objectCount">80 objects</span>
+    <span id="readyText">ready</span>
+  </div>
+  <div class="file-list">
+    <div class="file-item" data-file="index assets/video.mp4" data-type="file">📄 IMPORTANT VIDEO
+      <div class="file-download-btn">Download</div>
+    </div>
+  </div>
+  <div class="view-selector">
+    <div class="view-option" data-view="icons">Icons</div>
+    <div class="view-option" data-view="list">List</div>
+    <div class="view-option" data-view="details">Details</div>
+  </div>
+</div>
+
+<div class="taskbar">
+  <button class="start-button" id="startBtn">Start</button>
+</div>
+<div class="start-menu" id="startMenu">
+  <div class="start-menu-item" onclick="toggleSubmenu('gamesMenu')">Games ▸</div>
+  <div class="start-submenu" id="gamesMenu">
+    <div class="start-menu-item">Solitaire</div>
+    <div class="start-menu-item">Minesweeper</div>
+    <div class="start-menu-item">Pinball</div>
+  </div>
+  
+  <div class="start-menu-item" onclick="toggleSubmenu('programsMenu')">Programs ▸</div>
+  <div class="start-submenu" id="programsMenu">
+    <div class="start-menu-item">Internet Explorer</div>
+    <div class="start-menu-item">Paint</div>
+    <div class="start-menu-item">Media Player</div>
+  </div>
+  
+  <div class="start-menu-item" onclick="toggleSubmenu('settingsMenu')">Settings ▸</div>
+  <div class="start-submenu" id="settingsMenu">
+    <div class="start-menu-item">Control Panel</div>
+    <div class="start-menu-item">Display</div>
+    <div class="start-menu-item">Sounds</div>
+  </div>
+  
+  <div class="start-menu-item" onclick="document.getElementById('startMenu').style.display='none'">Shut Down...</div>
+</div>
+<script>
+  const windowEl = document.getElementById('window');
+  const content = document.getElementById('content');
+  const statusBar = document.getElementById('statusBar');
+  const objectCount = document.getElementById('objectCount');
+  const readyText = document.getElementById('readyText');
+  
+  // Initialize window as visible
+  windowEl.style.display = 'block';
+  content.style.display = 'grid';
+  statusBar.style.display = 'block';
+  windowEl.style.height = '650px';
+
+  const titleBar = document.getElementById('titleBar');
+  const minimizeBtn = document.getElementById('minimizeBtn');
+  const maximizeBtn = document.getElementById('maximizeBtn');
+  const closeBtn = document.getElementById('closeBtn');
+  let isMaximized = false;
+  let lastPosition = { top: 60, left: window.innerWidth / 2 - 460, width: 920, height: 650 };
+
+  // drag window logic
+  let dragging = false;
+  let offset = { x: 0, y: 0 };
+
+  titleBar.addEventListener('mousedown', (e) => {
+    if (![minimizeBtn, maximizeBtn, closeBtn].includes(e.target)) {
+      dragging = true;
+      offset.x = e.clientX - windowEl.offsetLeft;
+      offset.y = e.clientY - windowEl.offsetTop;
+      titleBar.style.cursor = 'grabbing';
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    dragging = false;
+    titleBar.style.cursor = 'grab';
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (dragging && !isMaximized) {
+      windowEl.style.left = (e.clientX - offset.x) + 'px';
+      windowEl.style.top = (e.clientY - offset.y) + 'px';
+    }
+  });
+
+  // mobile drag support
+  let isTouchDragging = false;
+  let touchOffsetX = 0;
+  let touchOffsetY = 0;
+
+  titleBar.addEventListener('touchstart', (e) => {
+    isTouchDragging = true;
+    const touch = e.touches[0];
+    const rect = windowEl.getBoundingClientRect();
+    touchOffsetX = touch.clientX - rect.left;
+    touchOffsetY = touch.clientY - rect.top;
+    e.preventDefault();
+  });
+
+  document.addEventListener('touchmove', (e) => {
+    if (!isTouchDragging) return;
+    const touch = e.touches[0];
+    windowEl.style.left = (touch.clientX - touchOffsetX) + 'px';
+    windowEl.style.top = (touch.clientY - touchOffsetY) + 'px';
+  });
+
+  document.addEventListener('touchend', () => {
+    isTouchDragging = false;
+  });
+
+  // minimize
+  minimizeBtn.addEventListener('click', () => {
+    content.style.display = 'none';
+    statusBar.style.display = 'none';
+    windowEl.style.height = '70px';
+  });
+
+  // maximize toggle
+  maximizeBtn.addEventListener('click', () => {
+    if (!isMaximized) {
+      lastPosition = {
+        top: windowEl.offsetTop,
+        left: windowEl.offsetLeft,
+        width: windowEl.offsetWidth,
+        height: windowEl.offsetHeight
+      };
+      windowEl.style.top = '0';
+      windowEl.style.left = '0';
+      windowEl.style.width = '100vw';
+      windowEl.style.height = '100vh';
+      content.style.display = 'grid';
+      statusBar.style.display = 'block';
+      isMaximized = true;
+    } else {
+      windowEl.style.top = lastPosition.top + 'px';
+      windowEl.style.left = lastPosition.left + 'px';
+      windowEl.style.width = lastPosition.width + 'px';
+      windowEl.style.height = lastPosition.height + 'px';
+      content.style.display = 'grid';
+      statusBar.style.display = 'block';
+      isMaximized = false;
+    }
+  });
+
+  // close (hide)
+  closeBtn.addEventListener('click', () => {
+    windowEl.style.display = 'none';
+  });
+
+  const buttons = document.querySelectorAll('.hub-button');
+
+  buttons.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault(); // stop instant navigation
+      playBeep();
+      const href = btn.getAttribute('href');
+      setTimeout(() => {
+        window.location.href = href;
+      }, 200); // 200ms delay for beep to finish
+    });
+  });
+
+  function playBeep() {
+    try {
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(600, ctx.currentTime);
+      gain.gain.setValueAtTime(0.1, ctx.currentTime);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start();
+      osc.stop(ctx.currentTime + 0.15);
+    } catch (e) {
+      // fallback: just ignore if no audio
+    }
+  }
+
+  function showWindow() {
+    windowEl.style.display = 'flex';
+    content.style.display = 'grid';
+    statusBar.style.display = 'flex';
+    windowEl.style.height = '650px';
+  }
+
+  const desktopIcon = document.querySelector('.desktop-icon');
+  desktopIcon.addEventListener('click', () => {
+    windowEl.style.display = 'block';
+    content.style.display = 'grid';
+    statusBar.style.display = 'block';
+    windowEl.style.height = '650px';
+  });
+
+  desktopIcon.addEventListener('dblclick', showWindow);
+  windowEl.addEventListener('dblclick', (e) => e.stopPropagation());
+
+  function initResizeble() {
+    const resizeHandle = document.createElement('div');
+    resizeHandle.style.position = 'absolute';
+    resizeHandle.style.bottom = '0px';
+    resizeHandle.style.right = '0px';
+    resizeHandle.style.width = '5px';
+    resizeHandle.style.height = '5px';
+    resizeHandle.style.cursor = 'se-resize';
+    windowEl.appendChild(resizeHandle);
+
+    let resizing = false;
+
+    resizeHandle.addEventListener('mousedown', (e) => {
+      resizing = true;
+      document.addEventListener('mousemove', resize);
+      document.addEventListener('mouseup', () => resizing = false);
+    });
+
+    function resize(e) {
+      if (resizing) {
+        windowEl.style.width = e.clientX + 'px';
+        windowEl.style.height = e.clientY + 'px';
+      }
+    }
+  }
+
+  initResizeble();
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.altKey) {
+      maximizeBtn.click();
+    }
+  });
+
+  window.addEventListener('resize', () => {
+    if (isMaximized) {
+      windowEl.style.top = '0';
+      windowEl.style.left = '0';
+      windowEl.style.width = '100vw';
+      windowEl.style.height = '100vh';
+    }
+  });
+
+  const startBtn = document.getElementById('startBtn');
+  const startMenu = document.getElementById('startMenu');
+
+  startBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    startMenu.style.display = startMenu.style.display === 'none' ? 'block' : 'none';
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target !== startBtn && e.target !== startMenu && !startMenu.contains(e.target)) {
+      startMenu.style.display = 'none';
+    }
+  });
+
+  function toggleSubmenu(id) {
+    const menu = document.getElementById(id);
+    const submenus = document.querySelectorAll('.start-submenu');
+    submenus.forEach(sub => {
+      if (sub !== menu) {
+        sub.style.display = 'none';
+      }
+    });
+    menu.style.display = menu.style.display === 'none' ? 'block' : 'none';
+  }
+
+  const viewOptions = document.querySelectorAll('.view-option');
+  viewOptions.forEach(view => {
+    view.addEventListener('click', () => {
+      // Remove active class from all
+      viewOptions.forEach(v => v.classList.remove('view-option-active'));
+      // Add active class clicked view
+      view.classList.add('view-option-active');
+      
+      const viewType = view.getAttribute('data-view');
+       switch(viewType) {
+        case 'icons':
+          content.style.gridTemplateColumns = 'repeat(auto-fill, minmax(150px, 1fr))';
+          break;
+        case 'list':
+          content.style.gridTemplateColumns = '1fr';
+          break;
+        case 'details':
+          content.style.gridTemplateColumns = '1fr';
+          // Add more detailed view styling
+          break;
+      }
+    });
+  });
+
+  const fileItems = document.querySelectorAll('.file-item');
+  fileItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      if (e.target.classList.contains('file-download-btn')) {
+        e.stopPropagation();
+        playBeep();
+        const fileName = item.getAttribute('data-file');
+        const anchor = document.createElement('a');
+        anchor.href = fileName;
+        anchor.download = fileName.split('/').pop();
+        document.body.appendChild(anchor);
+        anchor.click();
+        setTimeout(() => document.body.removeChild(anchor), 0);
+      } else {
+        e.preventDefault();
+        playBeep();
+        const fileType = item.getAttribute('data-type');
+        if (fileType === 'folder') {
+          // Open folder
+          const folderPath = item.getAttribute('data-file');
+          statusBar.textContent = 'Opening ' + folderPath;
+        } else {
+          // Open file
+          const fileName = item.getAttribute('data-file');
+            openVideoPlayer();
+        }
+      }
+    });
+  });
+
+  // Update object count
+  objectCount.textContent = fileItems.length + ' objects';
+
+  function openVideoPlayer() {
+    const newWindow = document.createElement('div');
+    newWindow.className = 'video-player';
+    newWindow.style.display = 'none';
+
+    const videoContent = `
+      <h2>IMPORTANT VIDEO</h2>
+      <video controls autoplay>
+        <source src="index assets/video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+      <br>
+      <button onclick="this.parentElement.style.display = 'none'">Close</button>
+    `;
+    newWindow.innerHTML = videoContent;
+    document.body.appendChild(newWindow);
+    newWindow.style.display = 'block';
+  }
+
+  // Infinite scroll handler
+  content.addEventListener('scroll', () => {
+    const { scrollTop, scrollHeight, clientHeight } = content;
+
+    if(scrollTop + clientHeight >= scrollHeight) {
+      // Load more image content (could be from API in reality)
+      addMoreItems();
+    }
+  });
+
+  function addMoreItems() {
+    // This function is not defined, you need to implement it to load more items
+    console.log('Loading more items...');
+  }
+</script>
+</body>
+</html>
