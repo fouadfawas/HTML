@@ -1,0 +1,183 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    color: white;
+    font-family: 'Determination', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    cursor: none; 
+}
+
+#container {
+    position: relative;
+    width: 640px;
+    height: 480px;
+    overflow: hidden; 
+}
+
+#scene-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; 
+}
+
+.scene-image {
+    max-width: 75%;
+    max-height: 75%;
+    object-fit: contain;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    transform: translateY(-50px);
+    image-rendering: optimizeSpeed;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -o-crisp-edges;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
+
+.keyboard-key {
+    transition: background-color 0.2s, color 0.2s, text-shadow 0.2s;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-family: 'Determination', sans-serif;
+}
+
+.keyboard-key:not(.selected) {
+    background-color: transparent;
+    color: white;
+    text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+
+.keyboard-key.selected {
+    background-color: white;
+    color: black;
+    text-shadow: none;
+}
+
+.keyboard-key:hover:not(.selected) {
+    background-color: #444;
+}
+
+.menu-option {
+    transition: color 0.2s ease-in-out;
+}
+
+.confirm-option { 
+     transition: color 0.2s ease-in-out;
+     text-shadow: 2px 2px 0 #000;
+}
+
+#text-container {
+    position: absolute;
+    top: 345px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 75%;
+    text-align: left;
+    padding: 15px;
+    font-size: 24px;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+    font-family: 'Determination', sans-serif;
+    line-height: 1.2;
+    white-space: pre-line;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 4px 0 #000;
+    z-index: 10;
+    letter-spacing: 5px;
+    word-spacing: 12px;
+}
+
+#name-selection-container {
+}
+
+#name-display {
+     color: white; 
+}
+
+#name-display-confirm { 
+    color: white;
+    text-shadow: 2px 2px 0 #000;
+}
+
+#keyboard-container {
+}
+
+.settings-panel {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    border: 2px solid white;
+    border-radius: 5px;
+    z-index: 10;
+    color: white;
+    font-family: 'Determination', sans-serif;
+    font-size: 14px;
+}
+
+.settings-panel label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.settings-panel input {
+    width: 150px;
+    margin-left: 10px;
+}
+
+.settings-value {
+    display: inline-block;
+    min-width: 40px;
+    text-align: right;
+    margin-left: 5px;
+}
+
+.keyboard-row {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+#dialogue-box {
+    background: transparent;
+    padding: 20px;
+    border-radius: 10px;
+    box-sizing: border-box;
+    image-rendering: pixelated;
+    width: 85%;
+    height: 150px;
+}
+
+#dialogue-box img {
+    image-rendering: pixelated;
+    -webkit-font-smoothing: none;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* Since there is no #player in the current code, 
+   the following style will be added as is from the plan. */
+#player {
+    width: 72px;
+    height: 72px;
+}
