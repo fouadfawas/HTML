@@ -1,0 +1,109 @@
+body {
+    margin: 0;
+    overflow: hidden;
+    background-color: #1a1a1a;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+canvas {
+    display: block;
+    background-color: #333;
+}
+
+#controls {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+    font-family: Arial, sans-serif;
+    max-height: 90vh;
+    overflow-y: auto;
+    width: 220px;
+}
+
+#controls label {
+    display: block;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+#controls label:first-child {
+    margin-top: 0;
+}
+
+#controls input[type="range"] {
+    width: 100px;
+    margin-right: 5px;
+}
+
+#controls input[type="number"] {
+    margin-right: 5px;
+    padding: 2px;
+    border: 1px solid #666;
+    background: #222;
+    color: white;
+    border-radius: 3px;
+    font-size: 12px;
+}
+
+#controls button {
+    background: #4CAF50;
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 5px 5px 5px 0;
+    width: auto;
+}
+
+#controls button:hover {
+    background: #45a049;
+}
+
+#toggleControls {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+#mobileControls {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#zoomInBtn, #zoomOutBtn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: rgba(76, 175, 80, 0.9);
+    border: none;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#zoomInBtn:hover, #zoomOutBtn:hover {
+    background: rgba(69, 160, 73, 0.9);
+}
+
+#countDisplay, #speedDisplay, #gravityDisplay, #lengthDisplay, #massDisplay, #dampingDisplay, #trailLengthDisplay {
+    font-weight: bold;
+    color: #4CAF50;
+}

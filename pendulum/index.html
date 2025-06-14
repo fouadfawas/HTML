@@ -1,0 +1,64 @@
+<html>
+<head>
+    <title>Triple Pendulum</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <script type="importmap">
+        {
+            "imports": {}
+        }
+    </script>
+</head>
+<body>
+    <div id="controls">
+        <button id="toggleControls">Hide Controls</button>
+        <div id="controlsContent">
+            <label for="pendulumCount">Number of Pendulums:</label>
+            <input type="range" id="pendulumCount" min="1" max="10" value="3">
+            <input type="number" id="countInput" value="3" min="1" style="width: 50px;">
+            <span id="countDisplay">3</span>
+            
+            <label for="speedSlider">Speed:</label>
+            <input type="range" id="speedSlider" min="1" max="1000" value="500">
+            <input type="number" id="speedInput" value="500" min="1" style="width: 70px;">
+            <span id="speedDisplay">500</span>
+            
+            <button id="resetBtn">Reset</button>
+            
+            <label for="gravitySlider">Gravity:</label>
+            <input type="range" id="gravitySlider" min="1" max="50" value="10">
+            <input type="number" id="gravityInput" value="10" min="0" step="0.1" style="width: 60px;">
+            <span id="gravityDisplay">10</span>
+            
+            <label for="lengthSlider">Pendulum Length:</label>
+            <input type="range" id="lengthSlider" min="50" max="200" value="100">
+            <input type="number" id="lengthInput" value="100" min="1" style="width: 60px;">
+            <span id="lengthDisplay">100</span>
+            
+            <label for="massSlider">Mass:</label>
+            <input type="range" id="massSlider" min="1" max="50" value="10">
+            <input type="number" id="massInput" value="10" min="0.1" step="0.1" style="width: 60px;">
+            <span id="massDisplay">10</span>
+            
+            <label for="dampingSlider">Damping:</label>
+            <input type="range" id="dampingSlider" min="0" max="10" value="0" step="1">
+            <input type="number" id="dampingInput" value="0" min="0" step="1" style="width: 60px;">
+            <span id="dampingDisplay">0</span>
+            
+            <label for="trailLengthSlider">Trail Length:</label>
+            <input type="range" id="trailLengthSlider" min="0" max="5000" value="1000">
+            <input type="number" id="trailLengthInput" value="1000" min="0" style="width: 70px;">
+            <span id="trailLengthDisplay">1000</span>
+            
+            <button id="randomizeBtn">Randomize</button>
+            <button id="resetDefaultsBtn">Reset to Defaults</button>
+        </div>
+    </div>
+    <div id="mobileControls">
+        <button id="zoomInBtn">+</button>
+        <button id="zoomOutBtn">-</button>
+    </div>
+    <canvas id="pendulumCanvas"></canvas>
+    <script type="module" src="script.js"></script>
+</body>
+</html>
