@@ -1,0 +1,477 @@
+body {
+  margin: 0;
+  overflow: hidden;
+  background: url('space_background.png');
+  font-family: 'Orbitron', sans-serif;
+  color: #0f0;
+}
+
+canvas {
+  width: 100vw;
+  height: 100vh;
+}
+
+#hud {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  color: #0f0;
+  font-size: 18px;
+  text-shadow: 0 0 5px #0f0;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 20, 0, 0.5);
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #0f0;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+#hud div {
+  margin: 5px 0;
+  display: flex;
+  align-items: center;
+}
+
+#hud span {
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.missile-counter {
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+
+.missile-icon {
+  width: 15px;
+  height: 5px;
+  background-color: #0f0;
+  margin-right: 3px;
+  border-radius: 2px;
+  box-shadow: 0 0 3px #0f0;
+}
+
+.instructions {
+  position: fixed;
+  bottom: 20px;
+  left: 220px;
+  color: #0f0;
+  font-size: 14px;
+  text-shadow: 0 0 5px #0f0;
+  z-index: 100;
+  background: rgba(0, 20, 0, 0.7);
+  padding: 15px;
+  border-radius: 5px;
+  border: 1px solid #0f0;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+.target-indicator {
+  position: fixed;
+  width: 30px;
+  height: 30px;
+  border: 2px solid #0ff;
+  border-radius: 50%;
+  transition: all 0.2s;
+  opacity: 0.7;
+  z-index: 90;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+.target-lock {
+  position: fixed;
+  border: 2px dashed #0ff;
+  opacity: 0.7;
+  z-index: 90;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  color: #0ff;
+  font-size: 10px;
+  padding-bottom: 5px;
+  text-shadow: 0 0 3px #0ff;
+}
+
+.trajectory-line {
+  position: fixed;
+  height: 2px;
+  background: rgba(255, 0, 0, 0.4);
+  transform-origin: left center;
+  z-index: 89;
+  pointer-events: none;
+}
+
+.target-distance {
+  position: fixed;
+  color: #ff0;
+  font-size: 12px;
+  text-shadow: 0 0 3px #ff0;
+  text-align: center;
+  transform: translate(-50%, 0);
+  z-index: 91;
+  pointer-events: none;
+}
+
+.health-bar {
+  width: 100%;
+  height: 8px;
+  background: #111;
+  border: 1px solid #0f0;
+  margin-top: 5px;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.health-bar .fill {
+  height: 100%;
+  background: linear-gradient(to right, #0ff, #00f);
+  width: 100%;
+  transition: width 0.3s;
+}
+
+.radar {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  transform: none;
+  width: 80px !important;
+  height: 80px !important;
+  z-index: 100;
+}
+
+.radar-line {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 50%;
+  background-color: #0f0;
+  transform-origin: bottom center;
+  animation: radar-sweep 4s infinite linear;
+  box-shadow: 0 0 5px #0f0;
+}
+
+.radar-blip {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background-color: #f00;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 3px #f00;
+}
+
+.radar .player-marker {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #0f0;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 0 5px #0f0;
+}
+
+@keyframes radar-sweep {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #0f0;
+  font-size: 24px;
+  text-shadow: 0 0 10px #0f0;
+  opacity: 0;
+  transition: opacity 0.5s;
+  text-align: center;
+  z-index: 110;
+}
+
+.game-over-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.game-over-content {
+  background-color: rgba(0, 20, 0, 0.9);
+  padding: 40px;
+  border-radius: 10px;
+  border: 2px solid #0f0;
+  box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
+  text-align: center;
+  color: #0f0;
+  font-family: 'Orbitron', sans-serif;
+  max-width: 400px;
+}
+
+.game-over-content h2 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  text-shadow: 0 0 10px #0f0;
+}
+
+.game-over-content p {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+#restartButton {
+  background-color: rgba(0, 50, 0, 0.8);
+  color: #0f0;
+  border: 2px solid #0f0;
+  padding: 15px 30px;
+  font-size: 18px;
+  font-family: 'Orbitron', sans-serif;
+  cursor: pointer;
+  transition: all 0.3s;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+}
+
+#restartButton:hover {
+  background-color: rgba(0, 100, 0, 0.8);
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.6);
+  transform: scale(1.05);
+}
+
+.orientation-indicator {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: rgba(0, 20, 0, 0.5);
+  border: 1px solid #0f0;
+  box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.orientation-horizon {
+  position: absolute;
+  width: 90%;
+  height: 2px;
+  background-color: #0f0;
+  transform-origin: center;
+  box-shadow: 0 0 3px #0f0;
+}
+
+.orientation-vertical {
+  position: absolute;
+  width: 2px;
+  height: 90%;
+  background-color: #0f0;
+  transform-origin: center;
+  box-shadow: 0 0 3px #0f0;
+}
+
+.orientation-marker {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #0f0;
+  box-shadow: 0 0 5px #0f0;
+}
+
+.hit-feedback {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 5px solid rgba(255, 0, 0, 0.5);
+  pointer-events: none;
+  z-index: 200;
+  animation: hit-flash 0.3s;
+  display: none;
+}
+
+@keyframes hit-flash {
+  0% { opacity: 0; }
+  50% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+.enemy-bullet {
+  position: fixed;
+  width: 5px;
+  height: 5px;
+  background-color: #f00;
+  border-radius: 50%;
+  box-shadow: 0 0 5px #f00;
+  z-index: 90;
+  pointer-events: none;
+}
+
+.camera-mode {
+  position: fixed;
+  top: 20px;
+  right: 140px;
+  color: #0f0;
+  font-size: 14px;
+  text-shadow: 0 0 5px #0f0;
+  background: rgba(0, 20, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 5px;
+  border: 1px solid #0f0;
+  z-index: 110;
+}
+
+.mobile-controls {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 40vh;
+  z-index: 1000;
+  touch-action: none;
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.joystick-container {
+  position: absolute;
+  bottom: 20px;
+  width: 120px;
+  height: 120px;
+}
+
+.joystick-container.left {
+  left: 20px;
+}
+
+.joystick-container.right {
+  right: 20px;
+}
+
+.joystick-base {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(0, 255, 0, 0.2);
+  border: 2px solid #0f0;
+}
+
+.joystick-stick {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  margin: -25px 0 0 -25px;
+  border-radius: 50%;
+  background: rgba(0, 255, 0, 0.4);
+  border: 2px solid #0f0;
+}
+
+.mobile-buttons {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 20px;
+}
+
+.mobile-buttons button {
+  padding: 20px;
+  background: rgba(0, 255, 0, 0.2);
+  border: 2px solid #0f0;
+  color: #0f0;
+  border-radius: 50%;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 14px;
+}
+
+@font-face {
+  font-family: 'Orbitron';
+  src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .mobile-controls {
+    display: block;
+  }
+  
+  .instructions {
+    display: none;
+  }
+  
+  .radar {
+    top: 20px;
+    left: 20px;
+    transform: none;
+    width: 80px;
+    height: 80px;
+  }
+  
+  .orientation-indicator {
+    top: 110px;
+    right: 20px;
+    width: 80px;
+    height: 80px;
+  }
+}
+
+.theme-selector {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #0f0;
+}
+
+.theme-selector h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.theme-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 5px;
+}
+
+.theme-button {
+  background: rgba(0, 30, 0, 0.6);
+  border: 1px solid #0f0;
+  color: #0f0;
+  padding: 5px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.theme-button:hover {
+  background: rgba(0, 50, 0, 0.8);
+}
+
+.theme-button.active {
+  background: rgba(0, 100, 0, 0.8);
+  box-shadow: 0 0 10px #0f0;
+}

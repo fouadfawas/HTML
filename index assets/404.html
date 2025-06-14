@@ -1,0 +1,474 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Please Try Again Later.</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <style>
+    @font-face {
+      font-family: 'ModernDOS9x16';
+      src: url('/ModernDOS9x16.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background: #000;
+    }
+    body {
+      width: 100vw;
+      height: 100vh;
+    }
+    #crt-canvas {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 0;
+      background: #000;
+    }
+    .visually-hidden {
+      position: absolute !important;
+      height: 1px; width: 1px; overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px); white-space: nowrap;
+    }
+    #input-overlay {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #000;
+      border: 2px solid #FF3737;
+      padding: 10px 20px;
+      z-index: 10;
+      font-family: 'ModernDOS9x16', monospace;
+      color: #fff;
+      text-align: left;
+      min-width: 350px;
+      display: none;
+    }
+    #input-field {
+      background: #000;
+      border: none;
+      color: #fff;
+      font-family: 'ModernDOS9x16', monospace;
+      font-size: 20px;
+      width: 100%;
+      margin-top: 10px;
+      caret-color: #fff;
+      outline: none;
+    }
+    #countdown {
+      margin-top: 10px;
+      font-size: 20px;
+      color: #FF3737;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="crt-canvas"></canvas>
+  <span class="visually-hidden">Please try again later.</span>
+  <audio id="hum" loop autoplay src="about:blank"></audio>
+  
+  <div id="input-overlay">
+    <div>ENTER CODE:</div>
+    <input type="text" id="input-field" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+    <div id="countdown"></div>
+  </div>
+  
+  <script type="importmap">
+    {
+      "imports": {
+        "tone": "https://cdn.skypack.dev/tone"
+      }
+    }
+  </script>
+  <script type="module">
+    import * as Tone from "tone";
+
+    // CRT parameters
+    const canvas = document.getElementById('crt-canvas');
+    const ctx = canvas.getContext('2d');
+    const FONT_SIZE = 20;
+    const ROW_PADDING = 0;
+    const CHAR_PADDING = -1;
+    let MESSAGE = "Please try again later.";
+    const RED = "#FF3737";
+    const WHITE = "#ffffff";
+    const ASCII =
+      ' !"#$%&\'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
+
+    let cols, rows, charWidth, charHeight, msgStartCol, msgStartRow, msgWidth, msgHeight;
+    let asciiGrid = [];
+    let lastAsciiUpdate = 0;
+    const ASCII_UPDATE_INTERVAL = 50; // Faster than before
+    let asciiTextColor = WHITE; // Default color for ASCII text
+    let colorChangeTimeout = null; // For tracking the timeout
+    let countdownTimer = null; // For tracking the countdown timer
+
+    // Helper: Measures and returns pure text height
+    function getTextHeight(font) {
+      const el = document.createElement("span");
+      el.innerText = "Hg";
+      el.style.font = font;
+      el.style.position = "absolute";
+      document.body.appendChild(el);
+      const height = el.offsetHeight;
+      document.body.removeChild(el);
+      return height;
+    }
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      // Set font metrics
+      ctx.font = `${FONT_SIZE}px ModernDOS9x16, monospace`;
+
+      charWidth = ctx.measureText('M').width;
+      // Use text height as actual height, not fudge:
+      charHeight = getTextHeight(`${FONT_SIZE}px ModernDOS9x16, monospace`);
+
+      // Fit whole cols/rows, but ensure all space is used
+      cols = Math.floor((canvas.width + CHAR_PADDING) / (charWidth + CHAR_PADDING));
+      rows = Math.floor((canvas.height + ROW_PADDING) / (charHeight + ROW_PADDING));
+
+      // Centered message calculations
+      ctx.font = `bold ${FONT_SIZE}px ModernDOS9x16, monospace`;
+      msgWidth = ctx.measureText(MESSAGE).width;
+
+      ctx.font = `${FONT_SIZE}px ModernDOS9x16, monospace`;
+      msgHeight = charHeight;
+
+      // If all rows do NOT fill the screen, add rows/cols as needed until they do
+      while ((rows - 1) * (charHeight + ROW_PADDING) < canvas.height - charHeight - ROW_PADDING) {
+        rows += 1;
+      }
+      while ((cols - 1) * (charWidth + CHAR_PADDING) < canvas.width - charWidth - CHAR_PADDING) {
+        cols += 1;
+      }
+
+      // Ensure message does not spill outside the screen, and is truly centered
+      const msgColSpan = Math.ceil(msgWidth / (charWidth + CHAR_PADDING));
+      msgStartCol = Math.max(0, Math.floor((cols - msgColSpan) / 2));
+      msgStartRow = Math.max(0, Math.floor((rows - 1) / 2));
+
+      initAsciiGrid();
+    }
+
+    function initAsciiGrid() {
+      asciiGrid = [];
+      for (let row = 0; row < rows; ++row) {
+        asciiGrid[row] = [];
+        for (let col = 0; col < cols; ++col) {
+          asciiGrid[row][col] = ASCII[(Math.random() * ASCII.length) | 0];
+        }
+      }
+    }
+
+    function updateAsciiGrid() {
+      for (let row = 0; row < rows; ++row) {
+        for (let col = 0; col < cols; ++col) {
+          // Only update with some probability to avoid full grid change every time
+          if (Math.random() < 0.23) { // a bit more lively & visible
+            asciiGrid[row][col] = ASCII[(Math.random() * ASCII.length) | 0];
+          }
+        }
+      }
+    }
+
+    // CRT scanlines & vignette
+    function applyCRTEffect() {
+      ctx.save();
+      ctx.globalAlpha = 0.13;
+      ctx.fillStyle = "#fff";
+      for (let y = 0; y < canvas.height; y += 2) {
+        ctx.fillRect(0, y, canvas.width, 1);
+      }
+      ctx.restore();
+
+      let grad = ctx.createRadialGradient(
+        canvas.width/2,canvas.height/2,Math.min(canvas.height,canvas.width)/2 * 0.7,
+        canvas.width/2,canvas.height/2,Math.max(canvas.height,canvas.width)/1.1
+      );
+      grad.addColorStop(0,"rgba(0,0,0,0)");
+      grad.addColorStop(1,"rgba(0,0,0,0.48)");
+      ctx.save();
+      ctx.globalCompositeOperation = "source-over";
+      ctx.fillStyle = grad;
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.restore();
+    }
+
+    function applyCRTEffectOnCtx(ctxTarget) {
+      ctxTarget.save();
+      ctxTarget.globalAlpha = 0.13;
+      ctxTarget.fillStyle = "#fff";
+      for (let y = 0; y < canvas.height; y += 2) {
+        ctxTarget.fillRect(0, y, canvas.width, 1);
+      }
+      ctxTarget.restore();
+
+      let grad = ctxTarget.createRadialGradient(
+        canvas.width/2,canvas.height/2,Math.min(canvas.height,canvas.width)/2 * 0.7,
+        canvas.width/2,canvas.height/2,Math.max(canvas.height,canvas.width)/1.1
+      );
+      grad.addColorStop(0,"rgba(0,0,0,0)");
+      grad.addColorStop(1,"rgba(0,0,0,0.48)");
+      ctxTarget.save();
+      ctxTarget.globalCompositeOperation = "source-over";
+      ctxTarget.fillStyle = grad;
+      ctxTarget.fillRect(0,0,canvas.width,canvas.height);
+      ctxTarget.restore();
+    }
+
+    function drawScene(drawCtx) {
+      drawCtx.font = `${FONT_SIZE}px ModernDOS9x16, monospace`;
+      drawCtx.textBaseline = "top";
+      drawCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.font = `bold ${FONT_SIZE}px ModernDOS9x16, monospace`;
+      const msgColSpan = Math.ceil(msgWidth / (charWidth + CHAR_PADDING));
+      for (let row = 0; row < rows; ++row) {
+        for (let col = 0; col < cols; ++col) {
+          // Skip central message position
+          if (
+            row === msgStartRow &&
+            col >= msgStartCol &&
+            col < msgStartCol + msgColSpan
+          ) continue;
+
+          drawCtx.fillStyle = asciiTextColor; // Use the variable color instead of hardcoded WHITE
+          let ch = asciiGrid[row]?.[col] ?? ' ';
+          drawCtx.font = `${FONT_SIZE}px ModernDOS9x16, monospace`;
+          drawCtx.fillText(
+            ch,
+            col * (charWidth + CHAR_PADDING),
+            row * (charHeight + ROW_PADDING)
+          );
+        }
+      }
+
+      // Center message
+      drawCtx.save();
+      drawCtx.shadowColor = '#F66';
+      drawCtx.shadowBlur = 16;
+      drawCtx.font = `bold ${FONT_SIZE}px ModernDOS9x16, monospace`;
+      drawCtx.fillStyle = RED;
+
+      // Center aligned within grid
+      const xcenter = msgStartCol * (charWidth + CHAR_PADDING);
+      const ycenter = msgStartRow * (charHeight + ROW_PADDING);
+
+      drawCtx.fillText(
+        MESSAGE,
+        xcenter,
+        ycenter
+      );
+      drawCtx.restore();
+
+      applyCRTEffectOnCtx(drawCtx);
+    }
+
+    function render(now) {
+      if (!lastAsciiUpdate) lastAsciiUpdate = now;
+      if (now - lastAsciiUpdate > ASCII_UPDATE_INTERVAL) {
+        updateAsciiGrid();
+        lastAsciiUpdate = now;
+      }
+      drawScene(ctx);
+      requestAnimationFrame(render);
+    }
+
+    // --- HUMMING CHIPTONE ---
+    let humPlayed = false;
+    async function playHum() {
+      if (humPlayed) return;
+      humPlayed = true;
+      await Tone.start();
+      const synth = new Tone.Oscillator({
+        type: "triangle",
+        frequency: 55,
+        volume: -22,
+        detune: 0
+      }).toDestination();
+      synth.start();
+    }
+    document.addEventListener('click', playHum, { once: true });
+
+    // Input overlay handling
+    const inputOverlay = document.getElementById('input-overlay');
+    const inputField = document.getElementById('input-field');
+    const countdownElement = document.getElementById('countdown');
+    let isInputActive = false;
+    
+    // Setup key listener for K key and other keys
+    document.addEventListener('keydown', function(e) {
+      console.log('Key pressed:', e.key);
+      if (e.key.toLowerCase() === 'k' && !isInputActive) {
+        showInputOverlay();
+        setAsciiTextRed(); // Flash red on K key press too
+      } else if (e.key === 'Escape' && isInputActive) {
+        hideInputOverlay();
+        setAsciiTextRed(); // Flash red on Escape
+      } else if (e.key === 'Enter' && isInputActive) {
+        checkCode();
+        setAsciiTextRed(); // Flash red on Enter
+      } else if (e.key.toLowerCase() === 'r') {
+        // Reset ASCII grid when R is pressed
+        initAsciiGrid();
+        setAsciiTextRed(); // Flash red on reset
+      } else {
+        // Any key press causes the red flash
+        setAsciiTextRed();
+      }
+    });
+    
+    function setAsciiTextRed() {
+      // Clear any existing timeout
+      if (colorChangeTimeout) {
+        clearTimeout(colorChangeTimeout);
+      }
+      
+      // Set ASCII text to red
+      asciiTextColor = RED;
+      
+      // Set timeout to revert back to white after 3 seconds
+      colorChangeTimeout = setTimeout(() => {
+        asciiTextColor = WHITE;
+        colorChangeTimeout = null;
+      }, 3000);
+    }
+    
+    // Also trigger red flash for input field typing
+    inputField.addEventListener('input', function() {
+      setAsciiTextRed();
+    });
+    
+    function showInputOverlay() {
+      isInputActive = true;
+      inputOverlay.style.display = 'block';
+      countdownElement.style.display = 'none'; // Hide countdown initially
+      inputField.value = '';
+      inputField.focus();
+    }
+    
+    function hideInputOverlay() {
+      isInputActive = false;
+      inputOverlay.style.display = 'none';
+      // Clear any active countdown
+      if (countdownTimer) {
+        clearInterval(countdownTimer);
+        countdownTimer = null;
+      }
+    }
+    
+    async function playBeep() {
+      await Tone.start();
+      const synth = new Tone.Synth({
+        oscillator: {
+          type: "square"
+        },
+        envelope: {
+          attack: 0.01,
+          decay: 0.1,
+          sustain: 0.1,
+          release: 0.1
+        }
+      }).toDestination();
+      synth.volume.value = -10;
+      synth.triggerAttackRelease("C5", "16n");
+    }
+    
+    async function playErrorBeep() {
+      await Tone.start();
+      const synth = new Tone.Synth({
+        oscillator: {
+          type: "sawtooth"
+        },
+        envelope: {
+          attack: 0.01,
+          decay: 0.2,
+          sustain: 0,
+          release: 0.1
+        }
+      }).toDestination();
+      synth.volume.value = -8;
+      synth.triggerAttackRelease("F3", "8n");
+    }
+    
+    function startCountdown() {
+      // Clear any existing countdown
+      if (countdownTimer) {
+        clearInterval(countdownTimer);
+      }
+      
+      // Show countdown element
+      countdownElement.style.display = 'block';
+      
+      // Set message in input overlay instead of main message
+      inputField.value = "WRONG CODE.";
+      inputField.disabled = true;
+      
+      // Start from 25 seconds
+      let secondsLeft = 25;
+      
+      // Update countdown text
+      countdownElement.textContent = `Redirecting in ${secondsLeft} seconds...`;
+      
+      // Start countdown interval
+      countdownTimer = setInterval(() => {
+        secondsLeft--;
+        countdownElement.textContent = `Redirecting in ${secondsLeft} seconds...`;
+        
+        if (secondsLeft <= 0) {
+          clearInterval(countdownTimer);
+          countdownTimer = null;
+          window.location.href = 'https://websim.com';
+        }
+      }, 1000);
+    }
+    
+    function checkCode() {
+      const code = inputField.value.trim().toUpperCase();
+      if (code === "MESMORIZING") {
+        MESSAGE = "MESMORIZING.";
+        playBeep();
+        hideInputOverlay();
+      } else if (code === "PLEASE TRY AGAIN LATER.") {
+        MESSAGE = "";
+        // Clear all the ASCII grid characters
+        for (let row = 0; row < rows; ++row) {
+          for (let col = 0; col < cols; ++col) {
+            asciiGrid[row][col] = ' ';
+          }
+        }
+        playBeep();
+        hideInputOverlay();
+      } else {
+        // Wrong code entered
+        playErrorBeep();
+        startCountdown();
+      }
+    }
+
+    // Prevent default keyboard shortcuts (except for things like ctrl+r for refresh)
+    document.addEventListener('keydown', function(e) {
+      if (e.key.toLowerCase() === 'k' || 
+          (!isInputActive && !e.ctrlKey && !e.metaKey && e.key !== 'Tab')) {
+        e.preventDefault();
+      }
+    });
+
+    // Initialize manually to ensure everything is ready
+    setTimeout(() => {
+      resizeCanvas();
+      requestAnimationFrame(render);
+    }, 500);
+  </script>
+</body>
+</html>
